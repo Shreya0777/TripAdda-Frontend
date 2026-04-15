@@ -1,73 +1,156 @@
-import { useNavigate } from "react-router-dom";
-import axios from "../api/axios";
-import { useState, useEffect } from "react";
-import Profile from "../pages/Profile";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
-  const [user, setuser] = useState(null);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  //fetch profile
-  const fetchProfile = async () => {
-    try {
-      const res = await axios.get("/users/profile/view");
-      setuser(res.data);
-      console.log(res);
-    } catch (err) {
-      console.log("Profile error:", err);
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef();
 
   useEffect(() => {
-    fetchProfile();
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navigate = useNavigate();
-  const handlelogout = async () => {
-    try {
-      await axios.post("/logout");
-      navigate("/signup");
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
-    <div className="navbar bg-base-300 shadow-sm flex-1">
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl">TripTrail</a>
+    <div className="flex items-center justify-between px-8 py-3 bg-white shadow-sm sticky top-0 z-50">
+
+      {/* 🔵 LOGO */}
+      <h1
+        onClick={() => navigate("/")}
+        className="text-blue-600 font-bold text-xl cursor-pointer"
+      >
+        HelloTrips
+      </h1>
+
+      {/* 🔵 CENTER NAV LINKS */}
+      <div className="hidden md:flex items-center gap-8 font-medium">
+
+        <NavLink
+          to="/home"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-600 hover:text-blue-600"
+          }
+        >
+          Home
+        </NavLink>
+
+        <NavLink
+          to="/create-trip"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-600 hover:text-blue-600"
+          }
+        >
+          Add Trip
+        </NavLink>
+
+        <NavLink
+          to="/my-trips"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 border-b-2 border-blue-600 pb-1"
+              : "text-gray-600 hover:text-blue-600"
+          }
+        >
+          My Trips
+        </NavLink>
+
       </div>
-      <div className="flex gap-2">
-        {user && <p className="font-semibold">welcome,{user.username}</p>}
-        <input
-          type="text"
-          placeholder="Search"
-          className="input input-bordered w-24 md:w-auto"
-        />
-        <div className="dropdown dropdown-end">
+
+      {/* 🔵 RIGHT SECTION */}
+      {user ? (
+        <div className="flex items-center gap-5 relative" ref={dropdownRef}>
+
+          {/* 🔔 Notification */}
+          <span className="text-xl cursor-pointer">🔔</span>
+
+          {/* ⚙️ Settings */}
+          <span className="text-xl cursor-pointer">⚙️</span>
+
+          {/* 👤 Avatar */}
           <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
+            onClick={() => setOpen(!open)}
+            className="cursor-pointer"
           >
-            <div className="w-10 rounded-full">
-              <img alt="Tailwind CSS Navbar component" src={user?.photoURL} />
-            </div>
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt="avatar"
+                className="w-9 h-9 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
+                {user.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <button onClick={() => navigate("/profile")}>Profile</button>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <button onClick={handlelogout}>Logout</button>
-            </li>
-          </ul>
+
+          {/* 🔽 DROPDOWN */}
+          {open && (
+            <div className="absolute right-0 top-12 w-48 bg-white shadow-xl rounded-xl border overflow-hidden">
+
+              <div className="px-4 py-3 border-b">
+                <p className="text-sm font-medium text-gray-800">
+                  {user.name}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {user.email}
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                👤 Profile
+              </button>
+
+              <button
+                onClick={() => {
+                  navigate("/create-trip");
+                  setOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                ➕ Add Trip
+              </button>
+
+              <button
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+                className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+              >
+                🚪 Logout
+              </button>
+
+            </div>
+          )}
         </div>
-      </div>
+      ) : (
+        <button
+          onClick={() => navigate("/signup")}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+        >
+          Signup
+        </button>
+      )}
     </div>
   );
 };

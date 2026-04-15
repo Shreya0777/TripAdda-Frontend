@@ -1,54 +1,72 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Signup = () => {
-  const [name, setname] = useState("");
-  const [username, setusername] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username,setusername]= useState("");
+  const [agree, setAgree] = useState(false);
 
+
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  // 🔥 validation function
-  const validate = (field, value) => {
-    let error=""
-
-    if (field ==="name" && !value) error = "Name is required";
-    if (field ==="username" && !value) error = "Username is required";
-
-    if(field === "email"){
-      if(!value) error = "Email is required";
-      else if(!/\S+@\S+\.\S+/.test(value))
-        error = "Invalid email format";
+  // ✅ VALIDATION FUNCTION
+  const validate = () => {
+    if (!name.trim()) {
+      toast.error("Full name is required");
+      return false;
     }
 
-   if  (field=="password"){
-    if(!value) error = "Password is required";
-    else if(!/\S+@\S+\.\S+/.test(value)){
-      error =!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(value)
+     if (!username.trim()) {
+      toast.error("Username is required");
+      return false;
     }
-   }
 
-    setErrors((prev)=>({
-      ...prev,
-      [field]: error,
-    }))
+    if (!email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Invalid email format");
+      return false;
+    }
+
+    if (!password) {
+      toast.error("Password is required");
+      return false;
+    }
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password must be 8+ chars with uppercase, lowercase, number & special character"
+      );
+      return false;
+    }
+
+    if (!agree) {
+      toast.error("Please accept Terms & Conditions");
+      return false;
+    }
+
+    return true;
   };
-  const handlechange = (field, value,setter)=>{
-    setter(value);
 
-    if(errors[field,value]);
-  }
+  // ✅ SIGNUP HANDLER
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
-  const handleSignup = async () => {
-    validate("name",name);
-    validate("username",username);
-    validate("email",email);
-    validate("password",password);
+    if (!validate()) return;
 
-    if (Object.values(errors).some((err)=>err)) return;
     try {
       const res = await axios.post("/signup", {
         name,
@@ -57,104 +75,160 @@ const Signup = () => {
         password,
       });
 
+      toast.success("Account created successfully 🎉");
 
-      navigate("/");
+      login(res.data);
+      navigate("/home");
+      window.location.reload();
+
     } catch (err) {
-      setErrors((prev) => ({
-        ...prev,
-        api: err.response?.data?.message || "Signup Failed",
-      }));
+      const message = err.response?.data?.message;
+
+      if (message === "User already exists") {
+        toast.error("User already exists. Please login.");
+      } else {
+        toast.error(message || "Signup failed");
+      }
     }
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="card bg-base-300 w-96 my-20">
-        <div className="card-body">
-          <h2 className="card-title justify-center font-bold">Signup</h2>
+    <div className="min-h-screen flex">
 
-          {/* Name */}
+      {/* LEFT IMAGE SECTION */}
+      <div className="hidden md:flex w-1/2 relative">
+        <img
+          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+          alt="travel"
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-black/40 flex flex-col justify-between p-10 text-white">
+          <h1 className="text-xl font-semibold">HelloTrips</h1>
+
+          <div>
+            <span className="text-xs bg-white/20 px-3 py-1 rounded-full">
+              NEW HORIZON
+            </span>
+
+            <h2 className="text-4xl font-bold mt-4 leading-tight">
+              Curate your next <br /> great escape.
+            </h2>
+
+            <p className="mt-3 text-sm opacity-80 max-w-sm">
+              Join a global community of digital curators discovering the world’s most intentional destinations.
+            </p>
+          </div>
+
+          <p className="text-sm opacity-80">
+            12k+ curators joined this week
+          </p>
+        </div>
+      </div>
+
+      {/* RIGHT FORM SECTION */}
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-50 px-6">
+        <form
+          onSubmit={handleSignup}
+          className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md"
+        >
+          <h2 className="text-3xl font-bold text-gray-800">
+            Join HelloTrips
+          </h2>
+          <p className="text-gray-500 text-sm mb-6">
+            Begin your journey into curated travel experiences.
+          </p>
+
+          {/* GOOGLE BUTTON UI */}
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 mb-4 hover:bg-gray-100 transition"
+          >
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              alt="google"
+              className="w-5 h-5"
+            />
+            Continue with Google
+          </button>
+
+          {/* OR */}
+          <div className="flex items-center gap-3 my-4">
+            <hr className="flex-1 border-gray-300" />
+            <span className="text-gray-400 text-sm">OR</span>
+            <hr className="flex-1 border-gray-300" />
+          </div>
+
+          {/* NAME */}
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Full Name"
             value={name}
-            className={`input input-bordered w-full my-2 ${
-              errors.name ? "input-error" : ""
-            }`}
-            onChange={(e) => handlechange("name",e.target.value,setname)}
-            onBlur={()=>validate("name",name)}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          {errors.name && <p className="text-error text-sm">{errors.name}</p>}
-
-          {/* Username */}
+          {/* username*/}
           <input
             type="text"
             placeholder="Username"
             value={username}
-            className={`input input-bordered w-full my-2 ${
-              errors.username ? "input-error" : ""
-            }`}
-            onChange={(e) => handlechange("username",e.target.value,setusername)}
-            onBlur={()=> validate("username",username)}
+            onChange={(e)=>setusername(e.target.value)}
+             className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          {errors.username && (
-            <p className="text-error text-sm">{errors.username}</p>
-          )}
 
-          {/* Email */}
+          {/* EMAIL */}
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email Address"
             value={email}
-            className={`input input-bordered w-full my-2 ${
-              errors.email ? "input-error" : ""
-            }`}
-            onChange={(e) => handlechange("email",e.target.value,setemail)}
-            onBlur={()=> validate("email",email)}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          {errors.email && (
-            <p className="text-error text-sm">{errors.email}</p>
-          )}
 
-          {/* Password */}
+          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
             value={password}
-            className={`input input-bordered w-full my-2 ${
-              errors.password ? "input-error" : ""
-            }`}
-            onChange={(e) => handlechange("password",e.target.value,setpassword)}
-            onBlur={()=>validate("password",password)}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          {errors.password && (
-            <p className="text-error text-sm">{errors.password}</p>
-          )}
 
-          {/* API Error */}
-          {errors.api && (
-            <p className="text-error text-center">{errors.api}</p>
-          )}
-
-          <div className="card-actions justify-center">
-            <button
-              className="btn bg-blue-500 w-20"
-              onClick={handleSignup}
-            >
-              Signup
-            </button>
+          {/* TERMS */}
+          <div className="flex items-start gap-2 mb-3">
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={() => setAgree(!agree)}
+              className="mt-1"
+            />
+            <p className="text-sm text-gray-600">
+              I agree to the{" "}
+              <span className="text-blue-600 cursor-pointer">Terms of Service</span>{" "}
+              and{" "}
+              <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
+            </p>
           </div>
 
-          <p className="text-center mt-3 text-sm">
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            className="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+          >
+            Create Account
+          </button>
+
+          {/* LOGIN LINK */}
+          <p className="text-center mt-4 text-sm text-gray-600">
             Already have an account?{" "}
             <span
-              className="text-blue-500 cursor-pointer"
               onClick={() => navigate("/login")}
+              className="text-blue-600 font-medium cursor-pointer hover:underline"
             >
-              Login
+              Sign In
             </span>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
