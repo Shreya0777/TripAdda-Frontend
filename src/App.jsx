@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import TripDetails from "./Components/TripDetails";
+import MyTrips from "./Components/My-Trips";
 
 // Auth
 import { useAuth } from "./context/AuthContext";
@@ -44,6 +45,7 @@ function App() {
           element={!user ? <Login /> : <Navigate to="/home" />}
         />
 
+
         <Route
           path="/signup"
           element={!user ? <Signup /> : <Navigate to="/home" />}
@@ -64,6 +66,7 @@ function App() {
           />
 
           <Route path="trips/:id" element={<TripDetails />} />
+          <Route path="/my-trips" element={<MyTrips />} />
         </Route>
 
         {/* ❌ 404 PAGE */}

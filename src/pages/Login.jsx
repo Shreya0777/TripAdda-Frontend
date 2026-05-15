@@ -11,7 +11,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // ✅ VALIDATION
   const validate = () => {
     if (!email.trim()) {
       toast.error("Email is required");
@@ -32,7 +31,6 @@ const Login = () => {
     return true;
   };
 
-  // ✅ LOGIN HANDLER
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -42,11 +40,9 @@ const Login = () => {
       const res = await axios.post("/login", { email, password });
 
       toast.success("Login successful 🎉");
-
       login(res.data);
       navigate("/home");
       window.location.reload();
-
     } catch (err) {
       const message = err.response?.data?.message;
 
@@ -62,8 +58,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex">
-
-      {/* LEFT SIDE IMAGE */}
       <div className="hidden md:flex w-1/2 relative">
         <img
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
@@ -71,7 +65,7 @@ const Login = () => {
           className="w-full h-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-10 text-white">
+        <div className="absolute inset-0 bg-overlaySoft flex flex-col justify-end p-10 text-white">
           <h1 className="text-3xl font-bold leading-tight">
             "The real voyage of discovery consists not in seeking new landscapes,
             but in having new eyes."
@@ -80,23 +74,22 @@ const Login = () => {
         </div>
       </div>
 
-      {/* RIGHT SIDE FORM */}
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-50 px-6">
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-pageBg px-6">
         <form
           onSubmit={handleLogin}
-          className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md"
+          className="w-full max-w-md bg-cardBg p-8 rounded-2xl shadow-md"
         >
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-3xl font-bold text-headingText mb-2">
             Welcome back
           </h2>
-          <p className="text-gray-500 mb-6 text-sm">
+
+          <p className="text-mutedText mb-6 text-sm">
             Sign in to access your curated travel journal and expert guides.
           </p>
 
-          {/* GOOGLE BUTTON */}
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 mb-4 hover:bg-gray-100 transition"
+            className="w-full flex items-center justify-center gap-2 border border-borderMain rounded-lg py-2 mb-4 hover:bg-hoverBg transition"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -106,45 +99,40 @@ const Login = () => {
             Continue with Google
           </button>
 
-          {/* OR */}
           <div className="flex items-center gap-3 my-4">
-            <hr className="flex-1 border-gray-300" />
-            <span className="text-gray-400 text-sm">OR</span>
-            <hr className="flex-1 border-gray-300" />
+            <hr className="flex-1 border-borderMain" />
+            <span className="text-softText text-sm">OR</span>
+            <hr className="flex-1 border-borderMain" />
           </div>
 
-          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryFocus"
           />
 
-          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryFocus"
           />
 
-          {/* LOGIN BUTTON */}
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            className="w-full py-2 rounded-lg bg-primary text-white font-semibold hover:bg-primaryHover transition"
           >
             Sign In
           </button>
 
-          {/* SIGNUP */}
-          <p className="text-center mt-4 text-sm text-gray-600">
+          <p className="text-center mt-4 text-sm text-bodyText">
             New to HelloTrips?{" "}
             <span
               onClick={() => navigate("/signup")}
-              className="text-blue-600 font-medium cursor-pointer hover:underline"
+              className="text-primary font-medium cursor-pointer hover:underline"
             >
               Create an Account
             </span>

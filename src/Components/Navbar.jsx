@@ -66,6 +66,12 @@ const Navbar = () => {
         >
           My Trips
         </NavLink>
+        <NavLink
+        to="/my-trips" className="text-heading hover:text-primary">
+  
+        
+
+        </NavLink>
 
       </div>
 

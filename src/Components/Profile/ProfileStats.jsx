@@ -1,24 +1,24 @@
 const ProfileStats = ({ user, trips }) => {
   return (
-    <div className="stats stats-horizontal shadow w-full mt-6 bg-base-200">
+    <div className="stats stats-horizontal shadow w-full mt-6 bg-cardBg border border-borderMain">
       <div className="stat place-items-center">
-        <div className="stat-value text-xl">{trips.length}</div>
-        <div className="stat-desc">Trips shared</div>
+        <div className="stat-value text-xl text-headingText">{trips.length}</div>
+        <div className="stat-desc text-mutedText">Trips shared</div>
       </div>
 
       <div className="stat place-items-center">
-        <div className="stat-value text-xl">{user.countries || 0}</div>
-        <div className="stat-desc">Countries</div>
+        <div className="stat-value text-xl text-headingText">{user.countries || 0}</div>
+        <div className="stat-desc text-mutedText">Countries</div>
       </div>
 
       <div className="stat place-items-center">
-        <div className="stat-value text-xl">4.8</div>
-        <div className="stat-desc">Avg rating</div>
+        <div className="stat-value text-xl text-headingText">4.8</div>
+        <div className="stat-desc text-mutedText">Avg rating</div>
       </div>
 
       <div className="stat place-items-center">
-        <div className="stat-value text-xl">2.1k</div>
-        <div className="stat-desc">Helped</div>
+        <div className="stat-value text-xl text-headingText">2.1k</div>
+        <div className="stat-desc text-mutedText">Helped</div>
       </div>
     </div>
   );

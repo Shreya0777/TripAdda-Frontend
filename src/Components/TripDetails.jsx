@@ -4,14 +4,13 @@ import axios from "../api/axios";
 
 const TripDetails = () => {
   const { id } = useParams();
-
   const [trip, setTrip] = useState(null);
+  const [openSection, setOpenSection] = useState("itinerary");
 
   useEffect(() => {
     const fetchTrip = async () => {
       try {
         const res = await axios.get(`/trips/${id}`);
-
         setTrip(res.data.trip || res.data);
       } catch (err) {
         console.log(err);
@@ -21,422 +20,294 @@ const TripDetails = () => {
     fetchTrip();
   }, [id]);
 
-  if (!trip) {
-    return (
-      <div className="p-10 text-center">
-        Loading...
-      </div>
-    );
-  }
+  if (!trip) return <div className="p-10 text-center">Loading...</div>;
+
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  const Section = ({ id, icon, title, summary, children }) => (
+    <div className="bg-cardBg border border-borderMain rounded-xl overflow-hidden">
+      <button
+        onClick={() => toggleSection(id)}
+        className="w-full flex items-center justify-between p-4 text-left"
+      >
+        <div className="flex items-center gap-4">
+          <span className="text-xl">{icon}</span>
+
+          <div>
+            <h3 className="font-semibold text-headingText">{title}</h3>
+            {summary && <p className="text-sm text-mutedText">{summary}</p>}
+          </div>
+        </div>
+
+        <span className="text-xl text-mutedText">
+          {openSection === id ? "⌃" : "›"}
+        </span>
+      </button>
+
+      {openSection === id && (
+        <div className="px-4 pb-4 text-bodyText border-t border-borderMain">
+          {children}
+        </div>
+      )}
+    </div>
+  );
 
   return (
-    <div className="bg-gray-100 min-h-screen py-8 px-4">
+    <div className="min-h-screen bg-pageBg p-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
 
-      <div className="max-w-6xl mx-auto space-y-6">
-
-        {/* HERO IMAGE */}
-        <div className="bg-white rounded-2xl overflow-hidden shadow">
-
+        {/* LEFT SIDEBAR */}
+        <div className="bg-cardBg rounded-2xl p-4 shadow-sm h-fit">
           <img
             src={
-              trip.media?.[0]?.url
-                ? trip.media[0].url
-                : "https://source.unsplash.com/1200x500/?travel"
+              trip.media?.[0]?.url ||
+              "https://source.unsplash.com/500x400/?travel"
             }
             alt="trip"
-            className="w-full h-[400px] object-cover"
+            className="w-full h-52 object-cover rounded-xl"
           />
 
-          <div className="p-6">
+          <div className="mt-4">
+            <span className="text-xs bg-hoverBg text-primary px-3 py-1 rounded-full">
+              {trip.tripType || "Trip"}
+            </span>
 
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <h1 className="text-2xl font-bold text-headingText mt-3">
+              {trip.title}
+            </h1>
 
-              <div>
-                <h1 className="text-3xl font-bold text-gray-800">
-                  {trip.title}
-                </h1>
+            <p className="text-sm text-mutedText mt-2">
+              📍 {trip.destination?.city}, {trip.destination?.state}
+            </p>
 
-                <p className="text-gray-500 mt-2">
-                  📍 {trip.destination?.city},{" "}
-                  {trip.destination?.state}
-                </p>
+            <p className="text-sm text-mutedText">
+              🚏 From {trip.boardingPoint}
+            </p>
+          </div>
 
-                <p className="text-gray-500">
-                  🚏 From {trip.boardingPoint}
-                </p>
-              </div>
-
-              <div className="bg-blue-50 px-5 py-3 rounded-xl">
-
-                <p className="text-sm text-gray-500">
-                  Overall Rating
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  ⭐ {trip.ratings?.overall}/5
-                </h2>
-
-              </div>
+          <div className="grid grid-cols-2 gap-3 mt-5">
+            <div className="bg-hoverBg rounded-xl p-3 text-center">
+              <p className="font-bold text-headingText">
+                ₹{trip.budgetDetails?.costPerPerson}
+              </p>
+              <p className="text-xs text-mutedText">Per Person</p>
             </div>
 
-          </div>
-        </div>
+            <div className="bg-hoverBg rounded-xl p-3 text-center">
+              <p className="font-bold text-headingText">{trip.duration}</p>
+              <p className="text-xs text-mutedText">Days</p>
+            </div>
 
-        {/* QUICK INFO */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-hoverBg rounded-xl p-3 text-center">
+              <p className="font-bold text-headingText">
+                ⭐ {trip.ratings?.overall}
+              </p>
+              <p className="text-xs text-mutedText">Rating</p>
+            </div>
 
-          <div className="bg-white p-4 rounded-xl shadow">
-            <p className="text-gray-500 text-sm">
-              Duration
-            </p>
-
-            <h3 className="font-semibold text-lg">
-              ⏳ {trip.duration} Days
-            </h3>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow">
-            <p className="text-gray-500 text-sm">
-              Budget
-            </p>
-
-            <h3 className="font-semibold text-lg">
-              💰 ₹
-              {
-                trip.budgetDetails
-                  ?.costPerPerson
-              }
-              /person
-            </h3>
+            <div className="bg-hoverBg rounded-xl p-3 text-center capitalize">
+              <p className="font-bold text-headingText">{trip.tripType}</p>
+              <p className="text-xs text-mutedText">Trip Type</p>
+            </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow">
-            <p className="text-gray-500 text-sm">
-              Trip Type
-            </p>
-
-            <h3 className="font-semibold text-lg capitalize">
-              👥 {trip.tripType}
-            </h3>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow">
-            <p className="text-gray-500 text-sm">
-              Best Time
-            </p>
-
-            <h3 className="font-semibold text-lg">
-              🌤 {trip.bestTimeToVisit}
-            </h3>
-          </div>
-
-        </div>
-
-        {/* ABOUT */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-4">
-            ✨ About This Trip
-          </h2>
-
-          <p className="text-gray-600 leading-8">
-            {trip.description}
+          <p className="text-sm text-bodyText mt-5 leading-6">
+            {trip.description?.slice(0, 130)}...
           </p>
-
         </div>
 
-        {/* TRANSPORT */}
-        <div className="bg-white p-6 rounded-2xl shadow">
+        {/* RIGHT CONTENT */}
+        <div className="space-y-4">
 
-          <h2 className="text-2xl font-semibold mb-5">
-            🚗 Transport Information
-          </h2>
+          <Section
+            id="destination"
+            icon="📍"
+            title="Destination"
+            summary={`${trip.destination?.city}, ${trip.destination?.state}`}
+          >
+            <p>{trip.destination?.city}, {trip.destination?.state}, {trip.destination?.country}</p>
+          </Section>
 
-          <div className="grid md:grid-cols-2 gap-5">
+          <Section
+            id="boarding"
+            icon="🚏"
+            title="Boarding Point"
+            summary={trip.boardingPoint}
+          >
+            <p>{trip.boardingPoint}</p>
+          </Section>
 
-            <div className="bg-gray-50 p-4 rounded-xl">
-              <p className="text-gray-500 text-sm">
-                Transport Mode
-              </p>
-
-              <h3 className="font-semibold text-lg capitalize">
-                {
-                  trip.transportInfo
-                    ?.mode
-                }
-              </h3>
+          <Section
+            id="transport"
+            icon="🚌"
+            title="Transport Info"
+            summary={`${trip.transportInfo?.transportName || ""} ${trip.transportInfo?.route || ""}`}
+          >
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <p><strong>Mode:</strong> {trip.transportInfo?.mode}</p>
+              <p><strong>Name:</strong> {trip.transportInfo?.transportName}</p>
+              <p><strong>Route:</strong> {trip.transportInfo?.route}</p>
+              <p><strong>Duration:</strong> {trip.transportInfo?.duration}</p>
+              <p><strong>Fare:</strong> ₹{trip.transportInfo?.fare}</p>
             </div>
+          </Section>
 
-            <div className="bg-gray-50 p-4 rounded-xl">
-              <p className="text-gray-500 text-sm">
-                Transport Name
-              </p>
+          <Section
+            id="bestTime"
+            icon="📅"
+            title="Best Time to Visit"
+            summary={trip.bestTimeToVisit}
+          >
+            <p>{trip.bestTimeToVisit}</p>
+          </Section>
 
-              <h3 className="font-semibold text-lg">
-                {
-                  trip.transportInfo
-                    ?.transportName
-                }
-              </h3>
+          <Section
+            id="budget"
+            icon="💰"
+            title="Budget Details"
+            summary={`Total Budget: ₹${trip.budgetDetails?.totalBudget}`}
+          >
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
+              <p><strong>Per Person:</strong> ₹{trip.budgetDetails?.costPerPerson}</p>
+              <p><strong>Stay:</strong> ₹{trip.budgetDetails?.stayCost}</p>
+              <p><strong>Food:</strong> ₹{trip.budgetDetails?.foodCost}</p>
+              <p><strong>Transport:</strong> ₹{trip.budgetDetails?.transportCost}</p>
+              <p><strong>Sightseeing:</strong> ₹{trip.budgetDetails?.sightseeingCost}</p>
+              <p><strong>Other:</strong> ₹{trip.budgetDetails?.otherCost}</p>
             </div>
+          </Section>
 
-            <div className="bg-gray-50 p-4 rounded-xl">
-              <p className="text-gray-500 text-sm">
-                Route
-              </p>
-
-              <h3 className="font-semibold text-lg">
-                {
-                  trip.transportInfo
-                    ?.route
-                }
-              </h3>
+          <Section
+            id="stay"
+            icon="🏨"
+            title="Stay Details"
+            summary={`${trip.stayDetails?.hotelName || ""} ${trip.stayDetails?.location || ""}`}
+          >
+            <div className="space-y-2 mt-4">
+              <p><strong>Hotel:</strong> {trip.stayDetails?.hotelName}</p>
+              <p><strong>Location:</strong> {trip.stayDetails?.location}</p>
+              <p><strong>Type:</strong> {trip.stayDetails?.stayType}</p>
+              <p><strong>Price:</strong> ₹{trip.stayDetails?.pricePerNight}/night</p>
+              <p><strong>Rating:</strong> ⭐ {trip.stayDetails?.rating}</p>
+              <p>{trip.stayDetails?.stayReview}</p>
             </div>
+          </Section>
 
-            <div className="bg-gray-50 p-4 rounded-xl">
-              <p className="text-gray-500 text-sm">
-                Fare
-              </p>
-
-              <h3 className="font-semibold text-lg">
-                ₹
-                {
-                  trip.transportInfo
-                    ?.fare
-                }
-              </h3>
+          <Section
+            id="food"
+            icon="🍜"
+            title="Food Recommendation"
+            summary={trip.foodRecommendations?.mustTryFoods?.join(", ")}
+          >
+            <div className="space-y-3 mt-4">
+              <p><strong>Must Try:</strong> {trip.foodRecommendations?.mustTryFoods?.join(", ")}</p>
+              <p><strong>Cafes:</strong> {trip.foodRecommendations?.cafes?.join(", ")}</p>
+              <p><strong>Budget Options:</strong> {trip.foodRecommendations?.budgetFoodOptions?.join(", ")}</p>
             </div>
+          </Section>
 
-          </div>
-
-        </div>
-
-        {/* BUDGET */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-5">
-            💰 Budget Breakdown
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
-
-            <div className="bg-blue-50 p-4 rounded-xl">
-              Stay Cost <br />
-
-              <strong>
-                ₹
-                {
-                  trip.budgetDetails
-                    ?.stayCost
-                }
-              </strong>
-            </div>
-
-            <div className="bg-blue-50 p-4 rounded-xl">
-              Food Cost <br />
-
-              <strong>
-                ₹
-                {
-                  trip.budgetDetails
-                    ?.foodCost
-                }
-              </strong>
-            </div>
-
-            <div className="bg-blue-50 p-4 rounded-xl">
-              Transport Cost <br />
-
-              <strong>
-                ₹
-                {
-                  trip.budgetDetails
-                    ?.transportCost
-                }
-              </strong>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* STAY */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-5">
-            🏨 Stay Details
-          </h2>
-
-          <div className="space-y-3">
-
-            <p>
-              <strong>Hotel:</strong>{" "}
-              {
-                trip.stayDetails
-                  ?.hotelName
-              }
-            </p>
-
-            <p>
-              <strong>Location:</strong>{" "}
-              {
-                trip.stayDetails
-                  ?.location
-              }
-            </p>
-
-            <p>
-              <strong>Stay Type:</strong>{" "}
-              {
-                trip.stayDetails
-                  ?.stayType
-              }
-            </p>
-
-            <p>
-              <strong>Price Per Night:</strong> ₹
-              {
-                trip.stayDetails
-                  ?.pricePerNight
-              }
-            </p>
-
-            <p>
-              <strong>Rating:</strong> ⭐
-              {
-                trip.stayDetails
-                  ?.rating
-              }
-            </p>
-
-            <p className="text-gray-600">
-              {
-                trip.stayDetails
-                  ?.stayReview
-              }
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* FOOD */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-5">
-            🍜 Food Recommendations
-          </h2>
-
-          <div className="space-y-5">
-
-            <div>
-              <h3 className="font-semibold mb-2">
-                Must Try Foods
-              </h3>
-
-              <div className="flex flex-wrap gap-2">
-                {trip
-                  .foodRecommendations
-                  ?.mustTryFoods?.map(
-                    (food, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-orange-100 px-3 py-1 rounded-full text-sm"
-                      >
-                        {food}
-                      </span>
-                    )
-                  )}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">
-                Cafes
-              </h3>
-
-              <div className="flex flex-wrap gap-2">
-                {trip
-                  .foodRecommendations
-                  ?.cafes?.map(
-                    (cafe, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-yellow-100 px-3 py-1 rounded-full text-sm"
-                      >
-                        {cafe}
-                      </span>
-                    )
-                  )}
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* TIPS */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-5">
-            💡 Traveler Tips
-          </h2>
-
-          <ul className="space-y-3 list-disc pl-5 text-gray-600">
-
-            {trip.travelerTips?.map(
-              (tip, idx) => (
-                <li key={idx}>{tip}</li>
-              )
-            )}
-
-          </ul>
-
-        </div>
-
-        {/* GALLERY */}
-        <div className="bg-white p-6 rounded-2xl shadow">
-
-          <h2 className="text-2xl font-semibold mb-5">
-            🖼 Travel Gallery
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-
-            {trip.media?.map(
-              (item, idx) => (
-                <div
-                  key={idx}
-                  className="overflow-hidden rounded-xl"
-                >
-
-                  {item.type === "video" ? (
-                    <video
-                      controls
-                      className="w-full h-60 object-cover"
-                    >
-                      <source
-                        src={item.url}
-                      />
-                    </video>
-                  ) : (
-                    <img
-                      src={item.url}
-                      alt=""
-                      className="w-full h-60 object-cover"
-                    />
-                  )}
-
+          <Section
+            id="hidden"
+            icon="🌄"
+            title="Hidden Spots"
+            summary={`${trip.hiddenSpots?.length || 0} hidden gems`}
+          >
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
+              {trip.hiddenSpots?.map((spot, index) => (
+                <div key={index} className="bg-hoverBg p-3 rounded-xl">
+                  <h4 className="font-semibold text-headingText">{spot.title}</h4>
+                  <p className="text-sm text-mutedText">{spot.description}</p>
                 </div>
-              )
-            )}
+              ))}
+            </div>
+          </Section>
 
-          </div>
+          <Section
+            id="itinerary"
+            icon="🗓"
+            title={`Itinerary (${trip.itinerary?.days?.length || 0} Days)`}
+            summary="Day-wise plan with places to visit"
+          >
+            {trip.itinerary?.itineraryType === "video" && trip.itinerary?.videoUrl ? (
+              <video controls className="w-full rounded-xl mt-4 max-h-[400px] object-cover">
+                <source src={trip.itinerary.videoUrl} />
+              </video>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                {trip.itinerary?.days?.map((item, index) => (
+                  <div key={index} className="bg-hoverBg p-4 rounded-xl">
+                    <p className="text-sm text-primary font-medium">
+                      Day {item.day}
+                    </p>
+                    <h4 className="font-semibold text-headingText mt-1">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-mutedText mt-1">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Section>
+
+          <Section
+            id="gallery"
+            icon="🖼"
+            title="Trip Gallery"
+            summary={`${trip.media?.length || 0} photos/videos`}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+              {trip.media?.map((item, index) => (
+                item.type === "video" ? (
+                  <video key={index} controls className="h-32 w-full object-cover rounded-xl">
+                    <source src={item.url} />
+                  </video>
+                ) : (
+                  <img
+                    key={index}
+                    src={item.url}
+                    alt=""
+                    className="h-32 w-full object-cover rounded-xl"
+                  />
+                )
+              ))}
+            </div>
+          </Section>
+
+          <Section
+            id="tips"
+            icon="💡"
+            title="Tips from the Traveler"
+            summary={`${trip.travelerTips?.length || 0} tips`}
+          >
+            <ul className="list-disc pl-5 mt-4 space-y-2">
+              {trip.travelerTips?.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section
+            id="ratings"
+            icon="⭐"
+            title="Overall Ratings"
+            summary={`${trip.ratings?.overall}/5 overall rating`}
+          >
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
+              <p><strong>Budget:</strong> {trip.ratings?.budget}</p>
+              <p><strong>Safety:</strong> {trip.ratings?.safety}</p>
+              <p><strong>Food:</strong> {trip.ratings?.food}</p>
+              <p><strong>Stay:</strong> {trip.ratings?.stay}</p>
+              <p><strong>Transport:</strong> {trip.ratings?.transport}</p>
+              <p><strong>Experience:</strong> {trip.ratings?.experience}</p>
+            </div>
+          </Section>
 
         </div>
-
       </div>
-
     </div>
   );
 };

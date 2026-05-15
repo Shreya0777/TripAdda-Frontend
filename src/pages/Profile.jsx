@@ -19,14 +19,14 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="flex justify-center items-center min-h-screen bg-pageBg">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
   return (
-    <div className="w-screen mx-auto px-4 py-8">
+    <div className="w-screen min-h-screen mx-auto px-4 py-8 bg-pageBg text-headingText">
       <ProfileHeader user={user} />
       <ProfileStats user={user} trips={trips} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -34,11 +34,19 @@ const Profile = () => {
       {activeTab === "trips" && <TripsSection trips={trips} />}
 
       {activeTab === "saved" && (
-        <EmptyState icon="🔖" title="No saved trips" text="Bookmark trips you love!" />
+        <EmptyState
+          icon="🔖"
+          title="No saved trips"
+          text="Bookmark trips you love!"
+        />
       )}
 
       {activeTab === "reviews" && (
-        <EmptyState icon="⭐" title="No reviews yet" text="Reviews will appear here." />
+        <EmptyState
+          icon="⭐"
+          title="No reviews yet"
+          text="Reviews will appear here."
+        />
       )}
     </div>
   );

@@ -6,18 +6,20 @@ const ProfileInfo = ({ user }) => {
 
   return (
     <div className="px-4 mt-4">
-      <h2 className="text-xl font-bold">{user.name}</h2>
-      <p className="text-sm text-base-content/50">@{user.username}</p>
-      
+      <h2 className="text-xl font-bold text-headingText">{user.name}</h2>
+      <p className="text-sm text-mutedText">@{user.username}</p>
+
       {user.About && (
-        <p className="text-sm text-base-content/70 mt-2 max-w-md">
+        <p className="text-sm text-bodyText mt-2 max-w-md">
           {user.About}
         </p>
       )}
 
       <div className="flex flex-wrap gap-2 mt-3">
-        <div className="badge badge-ghost gap-1">📅 Joined {joinDate}</div>
-        <div className="badge badge-ghost gap-1">
+        <div className="badge bg-hoverBg text-bodyText border-borderMain gap-1">
+          📅 Joined {joinDate}
+        </div>
+        <div className="badge bg-hoverBg text-bodyText border-borderMain gap-1">
           📍 {user.location || "India"}
         </div>
       </div>
