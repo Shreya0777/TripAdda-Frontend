@@ -8,9 +8,8 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username,setusername]= useState("");
+  const [username, setusername] = useState("");
   const [agree, setAgree] = useState(false);
-
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ const Signup = () => {
       return false;
     }
 
-     if (!username.trim()) {
+    if (!username.trim()) {
       toast.error("Username is required");
       return false;
     }
@@ -48,7 +47,7 @@ const Signup = () => {
 
     if (!passwordRegex.test(password)) {
       toast.error(
-        "Password must be 8+ chars with uppercase, lowercase, number & special character"
+        "Password must be 8+ chars with uppercase, lowercase, number & special character",
       );
       return false;
     }
@@ -80,7 +79,6 @@ const Signup = () => {
       login(res.data);
       navigate("/home");
       window.location.reload();
-
     } catch (err) {
       const message = err.response?.data?.message;
 
@@ -94,7 +92,6 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex">
-
       {/* LEFT IMAGE SECTION */}
       <div className="hidden md:flex w-1/2 relative">
         <img
@@ -116,13 +113,12 @@ const Signup = () => {
             </h2>
 
             <p className="mt-3 text-sm opacity-80 max-w-sm">
-              Join a global community of digital curators discovering the world’s most intentional destinations.
+              Join a global community of digital curators discovering the
+              world’s most intentional destinations.
             </p>
           </div>
 
-          <p className="text-sm opacity-80">
-            12k+ curators joined this week
-          </p>
+          <p className="text-sm opacity-80">12k+ curators joined this week</p>
         </div>
       </div>
 
@@ -132,9 +128,7 @@ const Signup = () => {
           onSubmit={handleSignup}
           className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md"
         >
-          <h2 className="text-3xl font-bold text-gray-800">
-            Join HelloTrips
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-800">Join HelloTrips</h2>
           <p className="text-gray-500 text-sm mb-6">
             Begin your journey into curated travel experiences.
           </p>
@@ -143,6 +137,9 @@ const Signup = () => {
           <button
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 mb-4 hover:bg-gray-100 transition"
+            onClick={() => {
+              window.location.href = "http://localhost:5000/google";
+            }}
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -172,8 +169,8 @@ const Signup = () => {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e)=>setusername(e.target.value)}
-             className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={(e) => setusername(e.target.value)}
+            className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           {/* EMAIL */}
@@ -204,9 +201,13 @@ const Signup = () => {
             />
             <p className="text-sm text-gray-600">
               I agree to the{" "}
-              <span className="text-blue-600 cursor-pointer">Terms of Service</span>{" "}
+              <span className="text-blue-600 cursor-pointer">
+                Terms of Service
+              </span>{" "}
               and{" "}
-              <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
+              <span className="text-blue-600 cursor-pointer">
+                Privacy Policy
+              </span>
             </p>
           </div>
 

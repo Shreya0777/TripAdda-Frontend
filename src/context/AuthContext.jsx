@@ -7,46 +7,51 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token"); // 🔥 change
-
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      fetchProfile();
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/users/profile/view");
+      const res = await axios.get("/users/profile/view", {
+        withCredentials: true,
+      });
+
       setUser(res.data.user || res.data);
-    } catch {
+    } catch (error) {
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = (data) => {
-    sessionStorage.setItem("token", data.token); // 🔥 change
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-    setUser(data.user);
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const login = async () => {
+    await fetchProfile();
   };
 
   const logout = async () => {
     try {
-      await axios.post("/logout");
-    } catch {}
+      await axios.post("/logout", {}, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
-    sessionStorage.removeItem("token"); // 🔥 change
-    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        login,
+        logout,
+        fetchProfile,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -67,8 +67,8 @@ const Login = () => {
 
         <div className="absolute inset-0 bg-overlaySoft flex flex-col justify-end p-10 text-white">
           <h1 className="text-3xl font-bold leading-tight">
-            "The real voyage of discovery consists not in seeking new landscapes,
-            but in having new eyes."
+            "The real voyage of discovery consists not in seeking new
+            landscapes, but in having new eyes."
           </h1>
           <p className="mt-3 text-sm opacity-80">— Marcel Proust</p>
         </div>
@@ -90,6 +90,9 @@ const Login = () => {
           <button
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-borderMain rounded-lg py-2 mb-4 hover:bg-hoverBg transition"
+            onClick={() => {
+              window.location.href = "http://localhost:5000/google";
+            }}
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
