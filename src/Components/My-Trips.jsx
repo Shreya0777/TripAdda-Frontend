@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 
-import TripCard from "../Components/Profile/TripCard";
+import TripCard from "./Profile/TripCard";
 
 const MyTrips = () => {
   const [trips, setTrips] = useState([]);
@@ -14,7 +14,6 @@ const MyTrips = () => {
           withCredentials: true,
         });
 
-        console.log("MY TRIPS RESPONSE:", res.data);
 
         const tripsData = Array.isArray(res.data)
           ? res.data

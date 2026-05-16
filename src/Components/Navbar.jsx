@@ -28,7 +28,7 @@ const Navbar = () => {
         onClick={() => navigate("/")}
         className="text-blue-600 font-bold text-xl cursor-pointer"
       >
-        HelloTrips
+        TripAdda
       </h1>
 
       {/* 🔵 CENTER NAV LINKS */}

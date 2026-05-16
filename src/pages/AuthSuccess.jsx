@@ -9,7 +9,7 @@ const AuthSuccess = () => {
           withCredentials: true,
         });
 
-        console.log("Logged in user:", res.data);
+       
 
         window.location.replace("/home");
       } catch (error) {

@@ -11,25 +11,25 @@ function Footer() {
       <nav>
         <h6 className="footer-title text-blue-700">Services</h6>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Branding services"
         >
           Branding
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Design services"
         >
           Design
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Marketing services"
         >
           Marketing
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Advertisement services"
         >
           Advertisement
@@ -40,25 +40,25 @@ function Footer() {
       <nav>
         <h6 className="footer-title text-blue-700">Company</h6>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="About us"
         >
           About us
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Contact us"
         >
           Contact
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Job opportunities"
         >
           Jobs
         </a>
         <a
-          className="link link-hover text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
           aria-label="Press kit"
         >
           Press kit
@@ -116,7 +116,7 @@ function Footer() {
 
       {/* Bottom copyright line */}
       <div className="footer-title mt-4 text-sm text-gray-600 sm:col-span-3">
-        © 2026 TripTrail. All rights reserved.
+        © 2026 TripAdda. All rights reserved.
       </div>
     </footer>
   );
