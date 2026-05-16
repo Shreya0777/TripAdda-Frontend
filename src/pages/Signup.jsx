@@ -101,7 +101,7 @@ const Signup = () => {
         />
 
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-between p-10 text-white">
-          <h1 className="text-xl font-semibold">HelloTrips</h1>
+          <h1 className="text-xl font-semibold">TripAdda</h1>
 
           <div>
             <span className="text-xs bg-white/20 px-3 py-1 rounded-full">
@@ -118,7 +118,7 @@ const Signup = () => {
             </p>
           </div>
 
-          <p className="text-sm opacity-80">12k+ curators joined this week</p>
+          {/* <p className="text-sm opacity-80">12k+ curators joined this week</p> */}
         </div>
       </div>
 
@@ -138,7 +138,7 @@ const Signup = () => {
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 mb-4 hover:bg-gray-100 transition"
             onClick={() => {
-              window.location.href = "http://localhost:5000/google";
+               window.location.href = `${import.meta.env.VITE_API_URL}/google`;
             }}
           >
             <img

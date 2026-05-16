@@ -92,7 +92,7 @@ const Login = () => {
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-borderMain rounded-lg py-2 mb-4 hover:bg-hoverBg transition"
             onClick={() => {
-              window.location.href = "http://localhost:5000/google";
+             window.location.href = `${import.meta.env.VITE_API_URL}/google`;;
             }}
           >
             <img
