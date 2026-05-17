@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {useEffect} from "react";
 
 import Body from "./Components/Body";
 import eruda from "eruda";
@@ -18,7 +19,7 @@ import { useAuth } from "./context/AuthContext";
 
 function App() {
   const { user, loading } = useAuth();
-  
+
   useEffect(() => {
     eruda.init();
   }, []);
