@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Body from "./Components/Body";
-
+import eruda from "eruda";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -18,6 +18,11 @@ import { useAuth } from "./context/AuthContext";
 
 function App() {
   const { user, loading } = useAuth();
+  
+  useEffect(() => {
+    eruda.init();
+  }, []);
+
 
   if (loading) {
     return (

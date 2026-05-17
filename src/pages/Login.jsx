@@ -49,6 +49,7 @@ const handleLogin = async (e) => {
     }
 
     localStorage.setItem("token", token);
+   
 
     toast.success("Login successful 🎉");
     login(res.data);
