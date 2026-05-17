@@ -1,56 +1,50 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      colors: {
+        primary: "#2563EB",
+        primaryHover: "#1D4ED8",
+        primaryLight: "#60A5FA",
 
-       colors: {
-         primary: "#2563EB",
-  primaryHover: "#1D4ED8",
-  primaryLight: "#60A5FA",
+        page: "#F9FAFB",
 
-  page: "#F9FAFB",
+        card: "#FFFFFF",
 
-  card: "#FFFFFF",
+        heading: "#1F2937",
 
-  heading: "#1F2937",
+        bodyText: "#4B5563",
 
-  bodyText: "#4B5563",
+        muted: "#6B7280",
 
-  muted: "#6B7280",
+        borderColor: "#D1D5DB",
 
-  borderColor: "#D1D5DB",
+        glassWhite: "rgba(255,255,255,0.2)",
 
-  glassWhite: "rgba(255,255,255,0.2)",
+        overlayDark: "rgba(0,0,0,0.4)",
 
-  overlayDark: "rgba(0,0,0,0.4)",
+        overlaySoft: "rgba(0,0,0,0.3)",
 
-  overlaySoft: "rgba(0,0,0,0.3)",
+        // ADDED COLORS
+        headingText: "#1F2937",
 
-  // ADDED COLORS
-  headingText: "#1F2937",
+        mutedText: "#6B7280",
 
-  mutedText: "#6B7280",
+        cardBg: "#FFFFFF",
 
-  cardBg: "#FFFFFF",
+        hoverBg: "#F3F4F6",
 
-  hoverBg: "#F3F4F6",
+        borderMain: "#D1D5DB",
 
-  borderMain: "#D1D5DB",
+        // PROFILE GRADIENT
+        profileGradientFrom: "#4F46E5",
 
-  // PROFILE GRADIENT
-  profileGradientFrom: "#4F46E5",
+        profileGradientVia: "#7C3AED",
 
-  profileGradientVia: "#7C3AED",
-
-  profileGradientTo: "#EC4899",
+        profileGradientTo: "#EC4899",
       },
-    
     },
   },
   plugins: [require("daisyui")],
-}
-
+};

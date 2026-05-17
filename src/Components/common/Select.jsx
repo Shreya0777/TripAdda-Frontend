@@ -10,7 +10,7 @@ const Select = ({
     <div>
       {/* LABEL */}
       {label && (
-        <label className="block mb-2 text-sm font-medium text-bodyText">
+        <label className="w-full bg-black text-white border border-gray-500 rounded-lg px-4 py-3 appearance-none">
           {label}
         </label>
       )}
