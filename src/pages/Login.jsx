@@ -31,31 +31,41 @@ const Login = () => {
 
     return true;
   };
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  if (!validate()) return;
 
-    if (!validate()) return;
+  try {
+    const res = await axios.post("/login", { email, password });
 
-    try {
-      const res = await axios.post("/login", { email, password });
+    console.log("Login response:", res.data);
 
-      toast.success("Login successful 🎉");
-      login(res.data);
-      navigate("/home");
-      window.location.reload();
-    } catch (err) {
-      const message = err.response?.data?.message;
+    const token = res.data.token || res.data.accessToken;
 
-      if (message === "Invalid credentials") {
-        toast.error("Incorrect email or password");
-      } else if (message === "User not found") {
-        toast.error("User not found. Please signup.");
-      } else {
-        toast.error(message || "Login failed");
-      }
+    if (!token) {
+      toast.error("Token not received from backend");
+      return;
     }
-  };
+
+    localStorage.setItem("token", token);
+
+    toast.success("Login successful 🎉");
+    login(res.data);
+
+    navigate("/home");
+  } catch (err) {
+    const message = err.response?.data?.message;
+
+    if (message === "Invalid credentials") {
+      toast.error("Incorrect email or password");
+    } else if (message === "User not found") {
+      toast.error("User not found. Please signup.");
+    } else {
+      toast.error(message || "Login failed");
+    }
+  }
+};
 
   return (
     <div className="min-h-screen flex">
