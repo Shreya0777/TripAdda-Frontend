@@ -69,7 +69,7 @@ const handleLogin = async (e) => {
 };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="flex min-h-screen">
       <div className="hidden md:flex w-1/2 relative">
         <img
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
@@ -86,12 +86,12 @@ const handleLogin = async (e) => {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-pageBg px-6">
+      <div className="flex w-full items-center justify-center bg-page px-3 py-8 sm:px-6 md:w-1/2">
         <form
           onSubmit={handleLogin}
-          className="w-full max-w-md bg-cardBg p-8 rounded-2xl shadow-md"
+          className="w-full max-w-md rounded-2xl bg-cardBg p-5 shadow-md sm:p-8"
         >
-          <h2 className="text-3xl font-bold text-headingText mb-2">
+          <h2 className="mb-2 text-2xl font-bold text-headingText sm:text-3xl">
             Welcome back
           </h2>
 
@@ -116,7 +116,7 @@ const handleLogin = async (e) => {
 
           <div className="flex items-center gap-3 my-4">
             <hr className="flex-1 border-borderMain" />
-            <span className="text-softText text-sm">OR</span>
+            <span className="text-mutedText text-sm">OR</span>
             <hr className="flex-1 border-borderMain" />
           </div>
 
@@ -125,7 +125,7 @@ const handleLogin = async (e) => {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryFocus"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -133,7 +133,7 @@ const handleLogin = async (e) => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryFocus"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <button

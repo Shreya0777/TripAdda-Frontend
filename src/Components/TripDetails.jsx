@@ -30,14 +30,14 @@ const TripDetails = () => {
     <div className="bg-cardBg border border-borderMain rounded-xl overflow-hidden">
       <button
         onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between p-4 text-left"
+        className="flex w-full items-center justify-between gap-3 p-4 text-left"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <span className="text-xl">{icon}</span>
 
           <div>
-            <h3 className="font-semibold text-headingText">{title}</h3>
-            {summary && <p className="text-sm text-mutedText">{summary}</p>}
+            <h3 className="break-words font-semibold text-headingText">{title}</h3>
+            {summary && <p className="break-words text-sm text-mutedText">{summary}</p>}
           </div>
         </div>
 
@@ -55,18 +55,18 @@ const TripDetails = () => {
   );
 
   return (
-    <div className="min-h-screen bg-pageBg p-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
+    <div className="min-h-screen bg-page px-3 py-5 sm:px-4 lg:px-6">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 lg:grid-cols-[300px_1fr] lg:gap-6">
 
         {/* LEFT SIDEBAR */}
-        <div className="bg-cardBg rounded-2xl p-4 shadow-sm h-fit">
+        <div className="h-fit rounded-2xl bg-cardBg p-4 shadow-sm">
           <img
             src={
               trip.media?.[0]?.url ||
               "https://source.unsplash.com/500x400/?travel"
             }
             alt="trip"
-            className="w-full h-52 object-cover rounded-xl"
+            className="h-48 w-full rounded-xl object-cover sm:h-52"
           />
 
           <div className="mt-4">
@@ -74,7 +74,7 @@ const TripDetails = () => {
               {trip.tripType || "Trip"}
             </span>
 
-            <h1 className="text-2xl font-bold text-headingText mt-3">
+            <h1 className="mt-3 break-words text-xl font-bold text-headingText sm:text-2xl">
               {trip.title}
             </h1>
 
@@ -82,7 +82,7 @@ const TripDetails = () => {
               📍 {trip.destination?.city}, {trip.destination?.state}
             </p>
 
-            <p className="text-sm text-mutedText">
+            <p className="break-words text-sm text-mutedText">
               🚏 From {trip.boardingPoint}
             </p>
           </div>
@@ -145,7 +145,7 @@ const TripDetails = () => {
             title="Transport Info"
             summary={`${trip.transportInfo?.transportName || ""} ${trip.transportInfo?.route || ""}`}
           >
-            <div className="grid md:grid-cols-2 gap-4 mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <p><strong>Mode:</strong> {trip.transportInfo?.mode}</p>
               <p><strong>Name:</strong> {trip.transportInfo?.transportName}</p>
               <p><strong>Route:</strong> {trip.transportInfo?.route}</p>
@@ -169,7 +169,7 @@ const TripDetails = () => {
             title="Budget Details"
             summary={`Total Budget: ₹${trip.budgetDetails?.totalBudget}`}
           >
-            <div className="grid md:grid-cols-3 gap-4 mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               <p><strong>Per Person:</strong> ₹{trip.budgetDetails?.costPerPerson}</p>
               <p><strong>Stay:</strong> ₹{trip.budgetDetails?.stayCost}</p>
               <p><strong>Food:</strong> ₹{trip.budgetDetails?.foodCost}</p>
@@ -214,11 +214,11 @@ const TripDetails = () => {
             title="Hidden Spots"
             summary={`${trip.hiddenSpots?.length || 0} hidden gems`}
           >
-            <div className="grid md:grid-cols-3 gap-4 mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               {trip.hiddenSpots?.map((spot, index) => (
                 <div key={index} className="bg-hoverBg p-3 rounded-xl">
-                  <h4 className="font-semibold text-headingText">{spot.title}</h4>
-                  <p className="text-sm text-mutedText">{spot.description}</p>
+                  <h4 className="break-words font-semibold text-headingText">{spot.title}</h4>
+                  <p className="break-words text-sm text-mutedText">{spot.description}</p>
                 </div>
               ))}
             </div>
@@ -235,7 +235,7 @@ const TripDetails = () => {
                 <source src={trip.itinerary.videoUrl} />
               </video>
             ) : (
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {trip.itinerary?.days?.map((item, index) => (
                   <div key={index} className="bg-hoverBg p-4 rounded-xl">
                     <p className="text-sm text-primary font-medium">
@@ -259,10 +259,10 @@ const TripDetails = () => {
             title="Trip Gallery"
             summary={`${trip.media?.length || 0} photos/videos`}
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
               {trip.media?.map((item, index) => (
                 item.type === "video" ? (
-                  <video key={index} controls className="h-32 w-full object-cover rounded-xl">
+                  <video key={index} controls className="h-40 w-full rounded-xl object-cover sm:h-32">
                     <source src={item.url} />
                   </video>
                 ) : (
@@ -270,7 +270,7 @@ const TripDetails = () => {
                     key={index}
                     src={item.url}
                     alt=""
-                    className="h-32 w-full object-cover rounded-xl"
+                    className="h-40 w-full rounded-xl object-cover sm:h-32"
                   />
                 )
               ))}
@@ -296,7 +296,7 @@ const TripDetails = () => {
             title="Overall Ratings"
             summary={`${trip.ratings?.overall}/5 overall rating`}
           >
-            <div className="grid md:grid-cols-3 gap-4 mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               <p><strong>Budget:</strong> {trip.ratings?.budget}</p>
               <p><strong>Safety:</strong> {trip.ratings?.safety}</p>
               <p><strong>Food:</strong> {trip.ratings?.food}</p>

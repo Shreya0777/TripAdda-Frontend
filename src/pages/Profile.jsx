@@ -19,14 +19,14 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-pageBg">
+      <div className="flex min-h-screen items-center justify-center bg-page">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
   return (
-    <div className="w-screen min-h-screen mx-auto px-4 py-8 bg-pageBg text-headingText">
+    <div className="mx-auto min-h-screen w-full max-w-7xl overflow-x-hidden bg-page px-3 py-5 text-headingText sm:px-4 sm:py-8">
       <ProfileHeader user={user} />
       <ProfileStats user={user} trips={trips} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />

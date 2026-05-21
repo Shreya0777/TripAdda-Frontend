@@ -28,10 +28,10 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="flex items-center justify-between px-5 md:px-8 py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-5 md:px-8">
         <h1
           onClick={() => navigate("/home")}
-          className="text-blue-600 font-bold text-2xl cursor-pointer"
+          className="cursor-pointer text-xl font-bold text-blue-600 sm:text-2xl"
         >
           TripAdda
         </h1>
@@ -97,7 +97,7 @@ const Navbar = () => {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-3xl text-gray-800"
+          className="rounded-lg p-1 text-3xl text-gray-800 md:hidden"
         >
           ☰
         </button>
@@ -105,22 +105,22 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t px-5 py-4 space-y-4 shadow">
-          <NavLink onClick={() => setMobileOpen(false)} to="/home" className="block text-gray-700 font-medium">
+        <div className="space-y-2 border-t bg-white px-4 py-4 shadow md:hidden">
+          <NavLink onClick={() => setMobileOpen(false)} to="/home" className="block rounded-lg px-2 py-2 font-medium text-gray-700 hover:bg-gray-100">
             Home
           </NavLink>
 
-          <NavLink onClick={() => setMobileOpen(false)} to="/create-trip" className="block text-gray-700 font-medium">
+          <NavLink onClick={() => setMobileOpen(false)} to="/create-trip" className="block rounded-lg px-2 py-2 font-medium text-gray-700 hover:bg-gray-100">
             Add Trip
           </NavLink>
 
-          <NavLink onClick={() => setMobileOpen(false)} to="/my-trips" className="block text-gray-700 font-medium">
+          <NavLink onClick={() => setMobileOpen(false)} to="/my-trips" className="block rounded-lg px-2 py-2 font-medium text-gray-700 hover:bg-gray-100">
             My Trips
           </NavLink>
 
           {user ? (
             <>
-              <NavLink onClick={() => setMobileOpen(false)} to="/profile" className="block text-gray-700 font-medium">
+              <NavLink onClick={() => setMobileOpen(false)} to="/profile" className="block rounded-lg px-2 py-2 font-medium text-gray-700 hover:bg-gray-100">
                 Profile
               </NavLink>
 
@@ -130,7 +130,7 @@ const Navbar = () => {
                   setMobileOpen(false);
                   navigate("/login");
                 }}
-                className="block text-red-500 font-medium"
+                className="block rounded-lg px-2 py-2 font-medium text-red-500 hover:bg-gray-100"
               >
                 Logout
               </button>

@@ -18,13 +18,13 @@ const ProfileTabs = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <div className="mt-6 bg-cardBg border border-borderMain rounded-2xl p-2 flex gap-2 shadow-sm">
+    <div className="mt-6 flex gap-2 overflow-x-auto rounded-2xl border border-borderMain bg-cardBg p-2 shadow-sm">
 
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
-          className={`flex-1 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2
+          className={`min-w-[110px] flex-1 rounded-xl py-3 font-medium transition-all duration-200 flex items-center justify-center gap-2
           
           ${
             activeTab === tab.id

@@ -7,43 +7,31 @@ const Select = ({
   error,
 }) => {
   return (
-    <div>
-      {/* LABEL */}
+    <div className="w-full">
       {label && (
-        <label className="w-full bg-black text-white border border-gray-500 rounded-lg px-4 py-3 appearance-none">
+        <label className="block mb-2 text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
 
-      {/* SELECT */}
       <select
         name={name}
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-3 rounded-xl bg-cardBg text-headingText border 
-        ${
-          error
-            ? "border-red-500"
-            : "border-borderMain"
-        }
-        focus:outline-none focus:ring-2 focus:ring-primaryFocus`}
+        className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-blue-500 sm:text-base ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
       >
         <option value="">Select</option>
 
         {options.map((option) => (
           <option key={option} value={option}>
-            {option.charAt(0).toUpperCase() +
-              option.slice(1)}
+            {option.charAt(0).toUpperCase() + option.slice(1)}
           </option>
         ))}
       </select>
 
-      {/* ERROR */}
-      {error && (
-        <p className="text-red-500 text-sm mt-1">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
 };

@@ -14,7 +14,7 @@ export default {
 
         heading: "#1F2937",
 
-        bodyText: "#010203",
+        bodyText: "#616d79",
 
         muted: "#6B7280",
 

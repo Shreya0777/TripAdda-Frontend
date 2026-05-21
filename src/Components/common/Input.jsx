@@ -1,19 +1,23 @@
-const Input = ({ label, name, value, onChange, error }) => (
-  <div>
-    <label className="label">{label}</label>
+const Input = ({ label, name, value, onChange, error, type = "text", placeholder }) => (
+  <div className="w-full">
+    {label && (
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        {label}
+      </label>
+    )}
 
     <input
+      type={type}
       name={name}
       value={value}
       onChange={onChange}
-      className={`w-full bg-black text-white border rounded-lg px-4 py-3 placeholder-gray-400 appearance-none ${
-        error ? "border-red-500" : "border-gray-500"
+      placeholder={placeholder}
+      className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:ring-2 focus:ring-blue-500 sm:text-base ${
+        error ? "border-red-500" : "border-gray-300"
       }`}
     />
 
-    {error && (
-      <p className="text-red-500 text-sm">{error}</p>
-    )}
+    {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
   </div>
 );
 

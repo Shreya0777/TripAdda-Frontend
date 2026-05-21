@@ -1,15 +1,15 @@
 const ProfileHeader = ({ user }) => {
   return (
     <>
-      <div className="h-48 bg-gradient-to-r from-profileGradientFrom via-profileGradientVia to-profileGradientTo">
-        <div className="absolute bottom-3 right-4 badge bg-cardBg/20 text-white border-white/20 text-xs opacity-60">
+      <div className="relative h-36 rounded-2xl bg-gradient-to-r from-profileGradientFrom via-profileGradientVia to-profileGradientTo sm:h-48">
+        <div className="badge absolute bottom-3 right-3 border-white/20 bg-cardBg/20 text-xs text-white opacity-80 sm:right-4">
           ✈ {user.countries || 0} countries explored
         </div>
       </div>
 
-      <div className="flex justify-between items-end -mt-10 px-4">
+      <div className="-mt-10 flex items-end justify-between px-3 sm:px-4">
         <div className="avatar">
-          <div className="w-20 rounded-full ring ring-cardBg ring-offset-cardBg ring-offset-2">
+          <div className="w-20 rounded-full ring ring-cardBg ring-offset-2 ring-offset-cardBg">
             <img
               src={
                 user.photoURL ||
@@ -19,14 +19,14 @@ const ProfileHeader = ({ user }) => {
             />
           </div>
         </div>
-        <button className="btn btn-sm btn-outline mb-1 border-borderMain text-headingText hover:bg-hoverBg">
+        <button className="btn btn-outline btn-sm mb-1 border-borderMain text-headingText hover:bg-hoverBg">
           Edit Profile
         </button>
       </div>
 
-      <div className="px-4 mt-4">
-        <h2 className="text-xl font-bold text-headingText">{user.name}</h2>
-        <p className="text-sm text-mutedText">@{user.username}</p>
+      <div className="mt-4 px-3 sm:px-4">
+        <h2 className="break-words text-xl font-bold text-headingText">{user.name}</h2>
+        <p className="break-words text-sm text-mutedText">@{user.username}</p>
 
         {user.About && (
           <p className="text-sm text-bodyText mt-2 max-w-md">

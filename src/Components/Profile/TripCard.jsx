@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const TripCard = ({ trip }) => {
   return (
     <Link to={`/trips/${trip._id}`}>
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition cursor-pointer">
+      <div className="h-full overflow-hidden rounded-2xl bg-white shadow-sm transition hover:shadow-md">
         {/* IMAGE */}
         <img
           src={
@@ -12,13 +12,13 @@ const TripCard = ({ trip }) => {
               : "https://source.unsplash.com/400x300/?travel"
           }
           alt={trip.title}
-          className="w-full h-52 object-cover"
+          className="h-44 w-full object-cover sm:h-52"
         />
 
         {/* CONTENT */}
         <div className="p-4">
-          <div className="flex justify-between items-center">
-            <h2 className="font-semibold text-lg">{trip.title}</h2>
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="line-clamp-1 text-base font-semibold sm:text-lg">{trip.title}</h2>
             <span className="text-sm text-orange-500">
               ⭐ {trip.rating || 4.5}
             </span>
@@ -29,7 +29,7 @@ const TripCard = ({ trip }) => {
           </p>
 
           {/* FOOTER */}
-          <div className="flex justify-between items-center mt-4">
+          <div className="mt-4 flex items-end justify-between gap-3">
             <div>
               <p className="text-xs text-gray-400">TOTAL BUDGET</p>
               <p className="text-blue-600 font-semibold">
