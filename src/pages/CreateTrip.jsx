@@ -184,7 +184,7 @@ const CreateTrip = () => {
 
         {/* BASIC */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🧭 Basic Information</h2>
+         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🧭 Basic Information</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input
@@ -247,7 +247,7 @@ const CreateTrip = () => {
 
         {/* TRANSPORT */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
+         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
             🚗 Transport Information
           </h2>
 
@@ -296,7 +296,7 @@ const CreateTrip = () => {
 
         {/* BUDGET */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">💰 Budget Details</h2>
+         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">💰 Budget Details</h2>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <Input
@@ -342,7 +342,7 @@ const CreateTrip = () => {
 
         {/* STAY */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🏨 Stay Details</h2>
+       <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🏨 Stay Details</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input
@@ -392,7 +392,7 @@ const CreateTrip = () => {
 
         {/* FOOD */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
+          <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
             🍜 Food Recommendations
           </h2>
 
@@ -420,7 +420,7 @@ const CreateTrip = () => {
 
         {/* ITINERARY */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🗓 Itinerary</h2>
+        <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🗓 Itinerary</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Select
@@ -456,7 +456,7 @@ Day 3 - Cafe hopping`}
 
         {/* EXPERIENCE */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">✨ Travel Experience</h2>
+          <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">✨ Travel Experience</h2>
 
           <Textarea
             label="Description"
@@ -478,7 +478,7 @@ Day 3 - Cafe hopping`}
 
         {/* RATINGS */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">⭐ Ratings</h2>
+         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">⭐ Ratings</h2>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <Input
@@ -523,7 +523,7 @@ Day 3 - Cafe hopping`}
 
         {/* TAGS */}
         <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🏷 Tags</h2>
+         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🏷 Tags</h2>
 
           <Textarea
             label="Tags (comma separated)"
@@ -535,7 +535,7 @@ Day 3 - Cafe hopping`}
 
         {/* MEDIA */}
 <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-  <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
+ <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
     🖼 Upload Media
   </h2>
 

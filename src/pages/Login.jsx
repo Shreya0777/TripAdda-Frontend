@@ -101,7 +101,8 @@ const handleLogin = async (e) => {
 
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-2 border border-borderMain rounded-lg py-2 mb-4 hover:bg-hoverBg transition"
+             className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2 font-medium text-gray-800 transition hover:bg-gray-100"
+
             onClick={() => {
              window.location.href = `${import.meta.env.VITE_API_URL}/google`;;
             }}
