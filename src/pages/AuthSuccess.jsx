@@ -7,9 +7,7 @@ const AuthSuccess = () => {
       try {
         const res = await axios.get("/users/profile/view", {
           withCredentials: true,
-        });
-
-       
+        }); 
 
         window.location.replace("/home");
       } catch (error) {

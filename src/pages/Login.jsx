@@ -77,7 +77,7 @@ const handleLogin = async (e) => {
           className="w-full h-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-overlaySoft flex flex-col justify-end p-10 text-white">
+        <div className="absolute inset-0 bg-overlaySoft flex flex-col justify-end p-10 text-inverseText">
           <h1 className="text-3xl font-bold leading-tight">
             "The real voyage of discovery consists not in seeking new
             landscapes, but in having new eyes."
@@ -101,8 +101,7 @@ const handleLogin = async (e) => {
 
           <button
             type="button"
-             className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2 font-medium text-gray-800 transition hover:bg-gray-100"
-
+            className="w-full flex items-center justify-center gap-2 border border-borderMain bg-cardBg text-bodyText rounded-lg py-2 mb-4 hover:bg-hoverBg transition font-medium"
             onClick={() => {
              window.location.href = `${import.meta.env.VITE_API_URL}/google`;;
             }}
@@ -126,7 +125,7 @@ const handleLogin = async (e) => {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg bg-cardBg text-inputText placeholder:text-lightText focus:outline-none focus:ring-2 focus:ring-focusRing"
           />
 
           <input
@@ -134,12 +133,12 @@ const handleLogin = async (e) => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 mb-3 border border-borderMain rounded-lg bg-cardBg text-inputText placeholder:text-lightText focus:outline-none focus:ring-2 focus:ring-focusRing"
           />
 
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-primary text-white font-semibold hover:bg-primaryHover transition"
+            className="w-full py-2 rounded-lg bg-primary text-inverseText font-semibold hover:bg-primaryHover transition"
           >
             Sign In
           </button>

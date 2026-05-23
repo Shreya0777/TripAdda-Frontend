@@ -3,33 +3,33 @@ import React from "react";
 function Footer() {
   return (
     <footer
-      className="footer w-full bg-gray-50 text-base-content p-8 sm:p-10 border-t border-gray-200"
+      className="footer w-full bg-pageBg text-base-content p-8 sm:p-10 border-t border-borderSoft"
       role="contentinfo"
       aria-label="Site footer"
     >
       {/* Services section */}
       <nav>
-        <h6 className="footer-title text-blue-700">Services</h6>
+        <h6 className="footer-title text-linkHoverText">Services</h6>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Branding services"
         >
           Branding
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Design services"
         >
           Design
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Marketing services"
         >
           Marketing
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Advertisement services"
         >
           Advertisement
@@ -38,27 +38,27 @@ function Footer() {
 
       {/* Company section */}
       <nav>
-        <h6 className="footer-title text-blue-700">Company</h6>
+        <h6 className="footer-title text-linkHoverText">Company</h6>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="About us"
         >
           About us
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Contact us"
         >
           Contact
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Job opportunities"
         >
           Jobs
         </a>
         <a
-          className=" text-gray-700 hover:text-orange-500 transition-colors duration-200"
+          className=" text-bodyText hover:text-accent transition-colors duration-200"
           aria-label="Press kit"
         >
           Press kit
@@ -67,10 +67,10 @@ function Footer() {
 
       {/* Social section */}
       <nav>
-        <h6 className="footer-title text-blue-700">Social</h6>
+        <h6 className="footer-title text-linkHoverText">Social</h6>
         <div className="grid grid-flow-col gap-4">
           <a
-            className="text-gray-600 hover:text-orange-500 hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
+            className="text-bodyText hover:text-accent hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
             aria-label="Follow us on Twitter"
           >
             <svg
@@ -84,7 +84,7 @@ function Footer() {
             </svg>
           </a>
           <a
-            className="text-gray-600 hover:text-orange-500 hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
+            className="text-bodyText hover:text-accent hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
             aria-label="Follow us on YouTube"
           >
             <svg
@@ -98,7 +98,7 @@ function Footer() {
             </svg>
           </a>
           <a
-            className="text-gray-600 hover:text-orange-500 hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
+            className="text-bodyText hover:text-accent hover:scale-105 transition-all duration-200 focus:outline focus:outline-orange-400 focus:outline-2"
             aria-label="Follow us on Facebook"
           >
             <svg
@@ -115,7 +115,7 @@ function Footer() {
       </nav>
 
       {/* Bottom copyright line */}
-      <div className="footer-title mt-4 text-sm text-gray-600 sm:col-span-3">
+      <div className="footer-title mt-4 text-sm text-bodyText sm:col-span-3">
         © 2026 TripAdda. All rights reserved.
       </div>
     </footer>

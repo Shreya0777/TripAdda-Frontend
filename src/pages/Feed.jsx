@@ -84,18 +84,18 @@ const TripsFeed = () => {
   }, [page, filters]);
 
   return (
-    <div className="min-h-screen bg-gray-100 px-3 py-5 sm:px-4 lg:px-6">
+    <div className="min-h-screen bg-sectionBg px-3 py-5 sm:px-4 lg:px-6">
 
       <div className="mx-auto max-w-7xl">
 
         {/* HEADER */}
         <div className="mb-6 sm:mb-8">
 
-          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+          <h1 className="text-2xl font-bold text-headingText sm:text-3xl">
             Explore Travel Experiences
           </h1>
 
-          <p className="mt-2 text-sm text-gray-500 sm:text-base">
+          <p className="mt-2 text-sm text-mutedText sm:text-base">
             Discover real trips, hidden gems and
             travel budgets shared by travelers ✨
           </p>
@@ -103,7 +103,7 @@ const TripsFeed = () => {
         </div>
 
         {/* FILTERS */}
-        <div className="mb-6 rounded-2xl bg-white p-4 shadow sm:mb-8 sm:p-5">
+        <div className="mb-6 rounded-2xl bg-cardBg p-4 shadow sm:mb-8 sm:p-5">
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
 
@@ -114,7 +114,7 @@ const TripsFeed = () => {
               placeholder="Destination"
               value={filters.destination}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
             {/* Transport */}
@@ -122,7 +122,7 @@ const TripsFeed = () => {
               name="transportMode"
               value={filters.transportMode}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
               <option value="">
                 Transport
@@ -157,7 +157,7 @@ const TripsFeed = () => {
               placeholder="Min Budget"
               value={filters.minBudget}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
             {/* Max Budget */}
@@ -167,7 +167,7 @@ const TripsFeed = () => {
               placeholder="Max Budget"
               value={filters.maxBudget}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
             {/* Rating */}
@@ -175,7 +175,7 @@ const TripsFeed = () => {
               name="minRating"
               value={filters.minRating}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
               <option value="">
                 Rating
@@ -200,7 +200,7 @@ const TripsFeed = () => {
               name="sortBy"
               value={filters.sortBy}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
               <option value="">
                 Sort By
@@ -244,12 +244,12 @@ const TripsFeed = () => {
 
               </div>
             ) : (
-              <div className="rounded-2xl bg-white p-6 text-center shadow sm:p-10">
+              <div className="rounded-2xl bg-cardBg p-6 text-center shadow sm:p-10">
                 <h2 className="text-2xl font-semibold">
                   No Trips Found 😢
                 </h2>
 
-                <p className="mt-2 text-sm text-gray-500 sm:text-base">
+                <p className="mt-2 text-sm text-mutedText sm:text-base">
                   Try changing filters
                 </p>
               </div>
@@ -264,7 +264,7 @@ const TripsFeed = () => {
                     setPage((prev) => prev - 1)
                   }
                   disabled={page === 1}
-                  className="rounded-xl bg-gray-300 px-4 py-2 disabled:opacity-50 sm:px-5"
+                  className="rounded-xl bg-activeBg px-4 py-2 disabled:opacity-50 sm:px-5"
                 >
                   Prev
                 </button>
@@ -278,7 +278,7 @@ const TripsFeed = () => {
                     setPage((prev) => prev + 1)
                   }
                   disabled={page === totalPages}
-                  className="rounded-xl bg-blue-600 px-4 py-2 text-white disabled:opacity-50 sm:px-5"
+                  className="rounded-xl bg-buttonPrimaryBg px-4 py-2 text-inverseText disabled:opacity-50 sm:px-5"
                 >
                   Next
                 </button>

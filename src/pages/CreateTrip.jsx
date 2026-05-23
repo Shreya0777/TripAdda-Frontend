@@ -170,21 +170,21 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-3 py-6 sm:px-4 sm:py-8 lg:px-6 lg:py-10">
+    <div className="min-h-screen bg-sectionBg px-3 py-6 sm:px-4 sm:py-8 lg:px-6 lg:py-10">
       <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+          <h1 className="text-2xl font-bold text-headingText sm:text-3xl">
             Share Your Travel Experience
           </h1>
-          <p className="mt-2 text-sm text-gray-500 sm:text-base">
+          <p className="mt-2 text-sm text-mutedText sm:text-base">
             Help travelers with real experiences, budget insights and hidden
             gems ✨
           </p>
         </div>
 
         {/* BASIC */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🧭 Basic Information</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🧭 Basic Information</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input
@@ -246,8 +246,8 @@ const CreateTrip = () => {
         </div>
 
         {/* TRANSPORT */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
             🚗 Transport Information
           </h2>
 
@@ -295,8 +295,8 @@ const CreateTrip = () => {
         </div>
 
         {/* BUDGET */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">💰 Budget Details</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">💰 Budget Details</h2>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <Input
@@ -341,8 +341,8 @@ const CreateTrip = () => {
         </div>
 
         {/* STAY */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-       <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🏨 Stay Details</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🏨 Stay Details</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input
@@ -391,8 +391,8 @@ const CreateTrip = () => {
         </div>
 
         {/* FOOD */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
             🍜 Food Recommendations
           </h2>
 
@@ -419,8 +419,8 @@ const CreateTrip = () => {
         </div>
 
         {/* ITINERARY */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-        <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🗓 Itinerary</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🗓 Itinerary</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Select
@@ -448,15 +448,15 @@ Day 3 - Cafe hopping`}
           )}
 
           {form.itineraryType === "video" && (
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm text-mutedText mt-4">
               Upload your itinerary video from the media section below 🎥
             </p>
           )}
         </div>
 
         {/* EXPERIENCE */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">✨ Travel Experience</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">✨ Travel Experience</h2>
 
           <Textarea
             label="Description"
@@ -477,8 +477,8 @@ Day 3 - Cafe hopping`}
         </div>
 
         {/* RATINGS */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">⭐ Ratings</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">⭐ Ratings</h2>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <Input
@@ -522,8 +522,8 @@ Day 3 - Cafe hopping`}
         </div>
 
         {/* TAGS */}
-        <div className="rounded-2xl bg-white p-4 shadow sm:p-6">
-         <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">🏷 Tags</h2>
+        <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+          <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">🏷 Tags</h2>
 
           <Textarea
             label="Tags (comma separated)"
@@ -534,13 +534,13 @@ Day 3 - Cafe hopping`}
         </div>
 
         {/* MEDIA */}
-<div className="rounded-2xl bg-white p-4 shadow sm:p-6">
- <h2 className="mb-4 text-lg font-bold text-black sm:mb-5 sm:text-xl">
+<div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
+  <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">
     🖼 Upload Media
   </h2>
 
   {/* CUSTOM FILE INPUT */}
-  <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700 sm:w-auto">
+  <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-buttonPrimaryBg px-5 py-3 text-inverseText transition hover:bg-buttonPrimaryHoverBg sm:w-auto">
     📁 Choose Files
 
     <input
@@ -552,14 +552,14 @@ Day 3 - Cafe hopping`}
     />
   </label>
 
-  <p className="text-sm text-gray-500 mt-3">
+  <p className="text-sm text-mutedText mt-3">
     Upload images and videos for your trip
   </p>
 
   {/* SELECTED FILES */}
   {media.length > 0 && (
     <div className="mt-5">
-      <p className="text-sm font-semibold text-gray-700 mb-3">
+      <p className="text-sm font-semibold text-bodyText mb-3">
         Selected files: {media.length}
       </p>
 
@@ -567,7 +567,7 @@ Day 3 - Cafe hopping`}
         {media.map((file, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3 rounded-xl bg-gray-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 rounded-xl bg-sectionBg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex min-w-0 items-center gap-3 overflow-hidden">
               <span className="text-xl">
@@ -576,7 +576,7 @@ Day 3 - Cafe hopping`}
                   : "🖼"}
               </span>
 
-              <p className="text-sm text-gray-700 truncate">
+              <p className="text-sm text-bodyText truncate">
                 {file.name}
               </p>
             </div>
@@ -588,7 +588,7 @@ Day 3 - Cafe hopping`}
                   prev.filter((_, i) => i !== index)
                 )
               }
-              className="text-red-500 hover:text-red-700 text-sm font-medium"
+              className="text-dangerText hover:text-dangerHoverText text-sm font-medium"
             >
               Remove
             </button>
@@ -599,7 +599,7 @@ Day 3 - Cafe hopping`}
   )}
 
   {errors.media && (
-    <p className="text-red-500 text-sm mt-3">
+    <p className="text-dangerText text-sm mt-3">
       {errors.media}
     </p>
   )}
@@ -609,7 +609,7 @@ Day 3 - Cafe hopping`}
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full rounded-xl bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 disabled:opacity-60 sm:w-auto"
+            className="w-full rounded-xl bg-buttonPrimaryBg px-6 py-3 text-inverseText hover:bg-buttonPrimaryHoverBg disabled:opacity-60 sm:w-auto"
           >
             {loading ? "Publishing..." : "Publish Experience"}
           </button>

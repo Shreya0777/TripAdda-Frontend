@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/users/profile/view", {
+      const res = await axios.get(`/users/profile/view?t=${Date.now()}`, {
         withCredentials: true,
       });
 
@@ -31,14 +31,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("/logout", {}, {
-        withCredentials: true,
-      });
+      await axios.post("/logout", {}, { withCredentials: true });
     } catch (error) {
       console.log(error);
+    } finally {
+      setUser(null);
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.replace("/login");
     }
-
-    setUser(null);
   };
 
   return (

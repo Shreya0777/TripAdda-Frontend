@@ -2,7 +2,7 @@ const ProfileHeader = ({ user }) => {
   return (
     <>
       <div className="relative h-36 rounded-2xl bg-gradient-to-r from-profileGradientFrom via-profileGradientVia to-profileGradientTo sm:h-48">
-        <div className="badge absolute bottom-3 right-3 border-white/20 bg-cardBg/20 text-xs text-white opacity-80 sm:right-4">
+        <div className="badge absolute bottom-3 right-3 border-borderInverse/20 bg-cardBg/20 text-xs text-inverseText opacity-80 sm:right-4">
           ✈ {user.countries || 0} countries explored
         </div>
       </div>

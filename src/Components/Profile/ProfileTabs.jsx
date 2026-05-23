@@ -28,7 +28,7 @@ const ProfileTabs = ({ activeTab, setActiveTab }) => {
           
           ${
             activeTab === tab.id
-              ? "bg-primary text-white shadow-md"
+              ? "bg-primary text-inverseText shadow-md"
               : "bg-transparent text-bodyText hover:bg-hoverBg"
           }`}
         >
