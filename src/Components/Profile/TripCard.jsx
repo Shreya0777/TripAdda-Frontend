@@ -18,7 +18,7 @@ const TripCard = ({ trip }) => {
         {/* CONTENT */}
         <div className="p-4">
           <div className="flex items-start justify-between gap-3">
-           <h2 className="mb-4 text-lg font-semibold sm:mb-5 sm:text-xl">{trip.title}</h2>
+           <h2 className="mb-4 text-lg font-bold  text-primary  sm:mb-5 sm:text-xl">{trip.title}</h2>
             <span className="text-sm text-accent">
               ⭐ {trip.rating || 4.5}
             </span>
