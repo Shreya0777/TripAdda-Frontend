@@ -10,6 +10,7 @@ export default {
         primaryFocus: "#60A5FA",
         accent: "#F97316",
         accentHover: "#EA580C",
+        
 
         // Layout backgrounds
         pageBg: "#F9FAFB",
