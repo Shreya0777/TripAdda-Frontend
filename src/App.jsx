@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 import Body from "./Components/Body";
 import eruda from "eruda";
@@ -11,10 +11,8 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
-import PublicProfile from "./Components/PublicProfile";
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
-
 
 import { useAuth } from "./context/AuthContext";
 
@@ -24,7 +22,6 @@ function App() {
   useEffect(() => {
     eruda.init();
   }, []);
-
 
   if (loading) {
     return (
@@ -59,11 +56,8 @@ function App() {
         <Route path="/" element={<Body />}>
           <Route path="home" element={<Home />} />
 
-          <Route
-            path="profile"
-            element={user ? <Profile /> : <Navigate to="/login" replace />}
-          />
-
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
           <Route
             path="create-trip"
             element={user ? <CreateTrip /> : <Navigate to="/login" replace />}
@@ -76,7 +70,7 @@ function App() {
 
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
-        <Route path="/profile/:id" element={<PublicProfile />} />
+       
 
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
