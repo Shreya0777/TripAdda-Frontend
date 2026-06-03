@@ -11,9 +11,10 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
-
+import PublicProfile from "./Components/PublicProfile";
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
+
 
 import { useAuth } from "./context/AuthContext";
 
@@ -75,6 +76,7 @@ function App() {
 
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
+        <Route path="/profile/:id" element={<PublicProfile />} />
 
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>

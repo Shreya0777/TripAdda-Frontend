@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 
-import TripCard from "./Profile/TripCard";
+import TripCard from "./TripCard";
 
 const MyTrips = () => {
   const [trips, setTrips] = useState([]);

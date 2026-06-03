@@ -14,6 +14,7 @@ const TripCard = ({ trip }) => {
           alt={trip.title}
           className="h-44 w-full object-cover sm:h-52"
         />
+        
 
         {/* CONTENT */}
         <div className="p-4">
@@ -33,7 +34,7 @@ const TripCard = ({ trip }) => {
             <div>
               <p className="text-xs text-lightText">TOTAL BUDGET</p>
               <p className="text-linkText font-semibold">
-                ₹{trip.costPerPerson}/per
+                ₹{trip.budgetDetails?.totalBudget}/person
               </p>
             </div>
 

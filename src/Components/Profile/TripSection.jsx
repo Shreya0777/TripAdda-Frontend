@@ -1,4 +1,4 @@
-import TripCard from "./TripCard";
+import TripCard from "../TripCard";
 import ShareTripCard from "./ShareTripCard";
 import EmptyState from "./EmptyState";
 
