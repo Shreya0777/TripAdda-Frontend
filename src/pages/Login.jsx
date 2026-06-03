@@ -103,7 +103,7 @@ const handleLogin = async (e) => {
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-borderMain bg-cardBg text-bodyText rounded-lg py-2 mb-4 hover:bg-hoverBg transition font-medium"
             onClick={() => {
-             window.location.href = `${import.meta.env.VITE_API_URL}/google`;;
+             window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;;
             }}
           >
             <img
