@@ -37,24 +37,18 @@ const handleLogin = async (e) => {
   if (!validate()) return;
 
   try {
-    const res = await axios.post("/login", { email, password });
+    await axios.post("/login", {
+      email,
+      password,
+    });
 
-    console.log("Login response:", res.data);
+    toast.success("OTP sent to your email 📩");
 
-    const token = res.data.token || res.data.accessToken;
-
-    if (!token) {
-      toast.error("Token not received from backend");
-      return;
-    }
-
-    localStorage.setItem("token", token);
-   
-
-    toast.success("Login successful 🎉");
-    login(res.data);
-
-    navigate("/home");
+    navigate("/verify-otp", {
+      state: {
+        email,
+      },
+    });
   } catch (err) {
     const message = err.response?.data?.message;
 

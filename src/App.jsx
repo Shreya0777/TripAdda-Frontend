@@ -13,6 +13,7 @@ import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
+import VerifyOtp from "./pages/verifyOtp";
 
 import { useAuth } from "./context/AuthContext";
 
@@ -45,6 +46,7 @@ function App() {
           path="/login"
           element={!user ? <Login /> : <Navigate to="/home" replace />}
         />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
 
         <Route
           path="/signup"
