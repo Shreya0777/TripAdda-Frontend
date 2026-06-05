@@ -197,7 +197,7 @@ const Signup = () => {
               setUsername(e.target.value);
               setUsernameStatus("");
             }}
-            debounce={(e) => checkUsername(e.target.value)}
+            onBlur={(e) => checkUsername(e.target.value)}
             className={`w-full px-4 py-2 mb-3 border border-borderMain rounded-lg bg-cardBg text-inputText placeholder:text-lightText focus:outline-none focus:ring-2 focus:ring-focusRingSoft ${
               usernameStatus === "Username already exists"
                 ? "border-red-500"
