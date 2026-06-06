@@ -37,7 +37,7 @@ const Signup = () => {
 
   const validate = () => {
     if (!name.trim()) {
-      toast.error("Full name is required");
+      toast.error("Full name is required");                                           
       return false;
     }
 
@@ -105,17 +105,24 @@ const Signup = () => {
       navigate("/home");
       window.location.reload();
     } catch (err) {
-      const message = err.response?.data?.message;
+  const message =
+    err.response?.data?.message ||
+    (typeof err.response?.data === "string"
+      ? err.response.data
+      : "") ||
+    "Signup failed";
 
-      if (message === "User already exists") {
-        toast.error("User already exists. Please login.");
-      } else if (message === "Username already exists") {
-        setUsernameStatus("Username already exists");
-        toast.error("Username already exists");
-      } else {
-        toast.error(message || "Signup failed");
-      }
-    }
+  console.log("Signup Error is:", message);
+
+  if (message.includes("User already exists")) {
+    toast.error("User already exists. Please login.");
+  } else if (message.includes("Username already exists")) {
+    setUsernameStatus("Username already exists");
+    toast.error("Username already exists");
+  } else {
+    toast.error(message);
+  }
+}
   };
 
   return (
