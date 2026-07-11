@@ -16,7 +16,7 @@ import MyTrips from "./Components/My-Trips";
 import VerifyOtp from "./pages/verifyOtp";
 import LandingPage from "./Landing/LandingPage";
 import { useAuth } from "./context/AuthContext";
-import AuthModal from "./components/auth/AuthModal";
+import AuthModal from "./Components/auth/AuthModal";
 
 function App() {
   const { user, loading } = useAuth();
