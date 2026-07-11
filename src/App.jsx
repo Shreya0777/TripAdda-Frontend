@@ -35,9 +35,8 @@ function App() {
 
   return (
     <BrowserRouter>
+     <AuthModal />
       <ToastContainer position="top-right" autoClose={3000} />
-      <AuthModal />
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
 

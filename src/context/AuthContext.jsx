@@ -7,14 +7,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch logged in user
   const fetchProfile = async () => {
     try {
-      const res = await axios.get(`/users/profile/view?t=${Date.now()}`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `/users/profile/view?t=${Date.now()}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       setUser(res.data.user || res.data);
-    } catch (error) {
+    } catch (err) {
       setUser(null);
     } finally {
       setLoading(false);
@@ -25,21 +29,29 @@ export const AuthProvider = ({ children }) => {
     fetchProfile();
   }, []);
 
+  // Refresh user after login/signup
   const login = async () => {
     await fetchProfile();
   };
 
+  // Logout
   const logout = async () => {
     try {
-      await axios.post("/logout", {}, { withCredentials: true });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setUser(null);
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.replace("/login");
+      await axios.post(
+        "/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (err) {
+      console.log(err);
     }
+
+    setUser(null);
+
+    localStorage.clear();
+    sessionStorage.clear();
   };
 
   return (
