@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import TripsFeed from "./Feed";
-import LandingPage from "../landing/LandingPage";
+import LandingPage from "../Landing/LandingPage";
 
 export default function Home() {
 
