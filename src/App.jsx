@@ -14,7 +14,7 @@ import AuthSuccess from "./pages/AuthSuccess";
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
 import VerifyOtp from "./pages/verifyOtp";
-import LandingPage from "./landing/LandingPage";
+import LandingPage from "./Landing/LandingPage";
 import { useAuth } from "./context/AuthContext";
 import AuthModal from "./components/auth/AuthModal";
 
