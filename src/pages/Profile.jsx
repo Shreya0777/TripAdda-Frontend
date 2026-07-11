@@ -54,7 +54,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-7xl overflow-x-hidden bg-page px-3 py-5 text-headingText sm:px-4 sm:py-8">
+    <div className="mx-auto min-h-screen w-full  overflow-x-hidden bg-page px-3 py-5 text-headingText sm:px-4 sm:py-8">
       <ProfileHeader user={user} />
 
       <ProfileStats user={user} trips={trips} />

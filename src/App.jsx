@@ -14,8 +14,9 @@ import AuthSuccess from "./pages/AuthSuccess";
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
 import VerifyOtp from "./pages/verifyOtp";
-
+import LandingPage from "./landing/LandingPage";
 import { useAuth } from "./context/AuthContext";
+import AuthModal from "./components/auth/AuthModal";
 
 function App() {
   const { user, loading } = useAuth();
@@ -35,14 +36,12 @@ function App() {
   return (
     <BrowserRouter>
       <ToastContainer position="top-right" autoClose={3000} />
+      <AuthModal />
 
       <Routes>
-        <Route
-          path="/"
-          element={user ? <Navigate to="/home" replace /> : <Signup />}
-        />
+        <Route path="/" element={<LandingPage />} />
 
-        <Route
+        {/* <Route
           path="/login"
           element={!user ? <Login /> : <Navigate to="/home" replace />}
         />
@@ -51,7 +50,7 @@ function App() {
         <Route
           path="/signup"
           element={!user ? <Signup /> : <Navigate to="/home" replace />}
-        />
+        /> */}
 
         <Route path="/auth/success" element={<AuthSuccess />} />
 
@@ -72,7 +71,6 @@ function App() {
 
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
-       
 
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>

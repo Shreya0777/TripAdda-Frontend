@@ -86,7 +86,7 @@ const TripsFeed = () => {
   return (
     <div className="min-h-screen bg-sectionBg px-3 py-5 sm:px-4 lg:px-6">
 
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto ">
 
         {/* HEADER */}
         <div className="mb-6 sm:mb-8">

@@ -67,7 +67,7 @@ const TripDetails = () => {
 
   return (
     <div className="min-h-screen bg-page px-3 py-5 sm:px-4 lg:px-6">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 lg:grid-cols-[300px_1fr] lg:gap-6">
+      <div className="mx-auto grid  grid-cols-1 gap-5 lg:grid-cols-[300px_1fr] lg:gap-6">
         {/* LEFT SIDEBAR */}
         <div className="h-fit rounded-2xl bg-cardBg p-4 shadow-sm">
           <img

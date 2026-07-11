@@ -4,11 +4,18 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import "./index.css"
 import eruda from "eruda";
+import AuthModalProvider from "./context/AuthModalContext";
 
 eruda.init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <App />
-  </AuthProvider>
+ <AuthProvider>
+
+    <AuthModalProvider>
+
+        <App />
+
+    </AuthModalProvider>
+
+</AuthProvider>
 );

@@ -1,18 +1,11 @@
 import { useAuth } from "../context/AuthContext";
 import TripsFeed from "./Feed";
+import LandingPage from "../landing/LandingPage";
 
-const Home = () => {
-  const { user } = useAuth();
+export default function Home() {
 
-  return (
-    <div className="min-h-screen bg-sectionBg p-4">
-      <div className="max-w-7xl mx-auto">
-        {/* MAIN SECTION */}
+const { user } = useAuth();
 
-        {!user ? <p>Please login to see trips</p> : <TripsFeed />}
-      </div>
-    </div>
-  );
-};
+return user ? <TripsFeed /> : <LandingPage />;
 
-export default Home;
+}
