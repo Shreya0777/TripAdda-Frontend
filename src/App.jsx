@@ -44,12 +44,14 @@ function App() {
           path="/login"
           element={!user ? <Login /> : <Navigate to="/home" replace />}
         />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
+       
 
         <Route
           path="/signup"
           element={!user ? <Signup /> : <Navigate to="/home" replace />}
         /> */}
+
+         <Route path="/verify-otp" element={<VerifyOtp />} />
 
         <Route path="/auth/success" element={<AuthSuccess />} />
 
