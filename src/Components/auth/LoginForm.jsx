@@ -137,6 +137,23 @@ export default function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
         className="mb-5 w-full rounded-xl border border-borderMain bg-cardBg px-4 py-3 outline-none transition focus:ring-2 focus:ring-primary"
       />
+        <div className="flex justify-end mb-5">
+
+<button
+type="button"
+onClick={()=>{
+navigate("/forgot-password")
+closeModal()
+}}
+className="text-primary text-sm hover:underline"
+>
+
+Forgot Password?
+
+</button>
+
+</div>
+
             <motion.button
         whileHover={{
           scale: 1.02,

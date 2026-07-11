@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaPlaneDeparture } from "react-icons/fa";
+import { useAuthModal } from "../context/AuthModalContext";
 
 export default function CTA() {
+  const { openSignup } = useAuthModal();
   return (
     <section className="relative py-28 overflow-hidden bg-pageBg">
-
       {/* Background Glow */}
 
       <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-primary/10 blur-3xl"></div>
@@ -57,8 +57,8 @@ export default function CTA() {
           viewport={{ once: true }}
           className="mt-6 text-lg opacity-90 max-w-2xl mx-auto"
         >
-          Start planning unforgettable journeys with your friends,
-          manage expenses and create memories together.
+          Start planning unforgettable journeys with your friends, manage
+          expenses and create memories together.
         </motion.p>
 
         {/* Button */}
@@ -70,12 +70,12 @@ export default function CTA() {
           viewport={{ once: true }}
           className="mt-10"
         >
-          <Link
-            to="/signup"
+          <button
+            onClick={openSignup}
             className="inline-flex items-center gap-3 bg-cardBg text-primary px-8 py-4 rounded-2xl font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
             Create Free Account ✈️
-          </Link>
+          </button>
         </motion.div>
 
         {/* Bottom Decorative Dots */}
@@ -85,9 +85,7 @@ export default function CTA() {
           <div className="w-2 h-2 rounded-full bg-white"></div>
           <div className="w-2 h-2 rounded-full bg-white"></div>
         </div>
-
       </motion.div>
-
     </section>
   );
 }

@@ -17,6 +17,8 @@ import VerifyOtp from "./pages/verifyOtp";
 import LandingPage from "./Landing/LandingPage";
 import { useAuth } from "./context/AuthContext";
 import AuthModal from "./Components/auth/AuthModal";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword"
 
 function App() {
   const { user, loading } = useAuth();
@@ -35,7 +37,7 @@ function App() {
 
   return (
     <BrowserRouter>
-     <AuthModal />
+      <AuthModal />
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -51,7 +53,10 @@ function App() {
           element={!user ? <Signup /> : <Navigate to="/home" replace />}
         /> */}
 
-         <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/auth/success" element={<AuthSuccess />} />
 
