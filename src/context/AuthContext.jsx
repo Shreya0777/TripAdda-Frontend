@@ -1,20 +1,29 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 import axios from "../api/axios";
 
 const AuthContext = createContext();
 
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
-  // Fetch logged in user
+  // ==========================
+  // Fetch Logged-in User
+  // ==========================
+
   const fetchProfile = async () => {
     try {
       const res = await axios.get(
-        `/users/profile/view?t=${Date.now()}`,
-        {
-          withCredentials: true,
-        }
+        `/users/profile/view?t=${Date.now()}`
       );
 
       setUser(res.data.user || res.data);
@@ -29,21 +38,21 @@ export const AuthProvider = ({ children }) => {
     fetchProfile();
   }, []);
 
-  // Refresh user after login/signup
+  // ==========================
+  // Login Success
+  // ==========================
+
   const login = async () => {
     await fetchProfile();
   };
 
+  // ==========================
   // Logout
+  // ==========================
+
   const logout = async () => {
     try {
-      await axios.post(
-        "/logout",
-        {},
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post("/logout");
     } catch (err) {
       console.log(err);
     }
@@ -59,9 +68,13 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         setUser,
+
         loading,
+
         login,
+
         logout,
+
         fetchProfile,
       }}
     >
@@ -69,5 +82,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

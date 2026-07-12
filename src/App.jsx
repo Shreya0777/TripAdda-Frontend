@@ -3,22 +3,21 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-import Body from "./Components/Body";
 import eruda from "eruda";
+
+import Body from "./Components/Body";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
-import TripDetails from "./Components/TripDetails";
-import MyTrips from "./Components/My-Trips";
 import VerifyOtp from "./pages/verifyOtp";
 import LandingPage from "./Landing/LandingPage";
-import { useAuth } from "./context/AuthContext";
+
+import TripDetails from "./Components/TripDetails";
+import MyTrips from "./Components/My-Trips";
 import AuthModal from "./Components/auth/AuthModal";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword"
+
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   const { user, loading } = useAuth();
@@ -38,47 +37,58 @@ function App() {
   return (
     <BrowserRouter>
       <AuthModal />
-      <ToastContainer position="top-right" autoClose={3000} />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+      />
+
       <Routes>
+
+        {/* Landing */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to="/home" replace />}
-        />
-       
-
-        <Route
-          path="/signup"
-          element={!user ? <Signup /> : <Navigate to="/home" replace />}
-        /> */}
-
+        {/* Login OTP */}
         <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        <Route path="/reset-password" element={<ResetPassword />} />
-
+        {/* Google Login */}
         <Route path="/auth/success" element={<AuthSuccess />} />
 
+        {/* Protected Layout */}
         <Route path="/" element={<Body />}>
+
           <Route path="home" element={<Home />} />
 
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/:id" element={<Profile />} />
           <Route
             path="create-trip"
-            element={user ? <CreateTrip /> : <Navigate to="/login" replace />}
+            element={
+              user ? (
+                <CreateTrip />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
           />
 
           <Route
             path="my-trips"
-            element={user ? <MyTrips /> : <Navigate to="/login" replace />}
+            element={
+              user ? (
+                <MyTrips />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
           />
 
+          <Route path="profile" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
           <Route path="trips/:id" element={<TripDetails />} />
+
         </Route>
 
         <Route path="*" element={<h1>Page Not Found</h1>} />
+
       </Routes>
     </BrowserRouter>
   );
