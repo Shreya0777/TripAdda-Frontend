@@ -10,7 +10,6 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
-// import VerifyOtp from "./pages/verifyOtp";
 import LandingPage from "./Landing/LandingPage";
 
 import TripDetails from "./Components/TripDetails";
@@ -49,7 +48,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
 
         {/* Login OTP */}
-        <Route path="/verify-otp" element={<VerifyOtp />} />
+        {/* <Route path="/verify-otp" element={<VerifyOtp />} /> */}
 
         {/* Google Login */}
         <Route path="/auth/success" element={<AuthSuccess />} />
