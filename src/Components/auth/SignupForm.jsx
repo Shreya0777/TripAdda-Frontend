@@ -2,10 +2,14 @@ import { useState } from "react";
 import axios from "../../api/axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { useAuthModal } from "../../context/AuthModalContext";
 
 export default function SignupForm() {
-  const { switchToLogin } = useAuthModal();
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const { switchToLogin, closeModal } = useAuthModal();
 
   const [name, setName] = useState("");
 
@@ -114,15 +118,18 @@ export default function SignupForm() {
         password,
       });
 
-      toast.success("Account created 🎉 Please log in to continue.");
+      toast.success("Account created 🎉");
 
-      // FIX: signup used to auto-login (login(res.data)), close the
-      // modal, navigate to /home, and force a full page reload — but
-      // your login flow requires OTP verification, so this bypassed
-      // that entirely and behaved inconsistently with a normal login.
-      // Now it just switches the same modal over to the Login form,
-      // so the user logs in through the real (OTP-verified) flow.
-      switchToLogin();
+      // FIX: signup's response already includes the user object and the
+      // backend already set the login cookie (res.cookie in /signup) —
+      // so there's no need to re-fetch the profile or force a full page
+      // reload (which used to also re-trigger AuthContext's initial
+      // fetch, an extra backend round-trip on top of signup itself).
+      // Setting the user directly is enough to reflect the logged-in
+      // state immediately.
+      setUser(res.data.user);
+      closeModal();
+      navigate("/home");
     } catch (err) {
       const message =
         err.response?.data?.message ||
