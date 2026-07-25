@@ -2,18 +2,10 @@ import { useState } from "react";
 import axios from "../../api/axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { useAuthModal } from "../../context/AuthModalContext";
 
 export default function SignupForm() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const {
-    switchToLogin,
-    closeModal,
-  } = useAuthModal();
+  const { switchToLogin } = useAuthModal();
 
   const [name, setName] = useState("");
 
@@ -122,15 +114,15 @@ export default function SignupForm() {
         password,
       });
 
-      toast.success("Account created 🎉");
+      toast.success("Account created 🎉 Please log in to continue.");
 
-      login(res.data);
-
-      closeModal();
-
-      navigate("/home");
-
-      window.location.reload();
+      // FIX: signup used to auto-login (login(res.data)), close the
+      // modal, navigate to /home, and force a full page reload — but
+      // your login flow requires OTP verification, so this bypassed
+      // that entirely and behaved inconsistently with a normal login.
+      // Now it just switches the same modal over to the Login form,
+      // so the user logs in through the real (OTP-verified) flow.
+      switchToLogin();
     } catch (err) {
       const message =
         err.response?.data?.message ||

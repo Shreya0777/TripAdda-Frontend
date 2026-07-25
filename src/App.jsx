@@ -69,7 +69,7 @@ function App() {
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
 
-        {/* <Route path="*" element={<h1>Page Not Found !</h1>} /> */}
+        <Route path="*" element={<h1>Page Not Found !</h1>} />
       </Routes>
     </BrowserRouter>
   );
