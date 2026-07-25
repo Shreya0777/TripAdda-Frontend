@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import axios from "../api/axios";
 import TripCard from "../Components/TripCard";
 
+// FIX: was calling the API on every keystroke in destination/min/max
+// budget fields (useEffect depended on the whole `filters` object, which
+// is a new reference every render). Debouncing collapses a burst of
+// keystrokes into one request, fired 400ms after typing stops.
+function useDebouncedValue(value, delayMs) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delayMs);
+    return () => clearTimeout(timer);
+  }, [value, delayMs]);
+  return debounced;
+}
+
 const TripsFeed = () => {
   const [trips, setTrips] = useState([]);
-
   const [page, setPage] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
-
   const [loading, setLoading] = useState(false);
 
-  // FILTERS
   const [filters, setFilters] = useState({
     destination: "",
     transportMode: "",
@@ -21,93 +30,77 @@ const TripsFeed = () => {
     sortBy: "",
   });
 
-  // HANDLE FILTER CHANGE
+  const debouncedFilters = useDebouncedValue(filters, 400);
+
+  // FIX: track the in-flight request so a slow, stale response can't
+  // overwrite a newer one (e.g. user changes filters twice quickly —
+  // without this, whichever request happens to resolve last "wins",
+  // even if it was the older query).
+  const abortControllerRef = useRef(null);
+
   const handleChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+    // FIX: reset to page 1 whenever filters change, so you can't get
+    // stuck on a now-out-of-range page with an empty result.
+    setPage(1);
   };
 
-  // FETCH TRIPS
-  const fetchTrips = async () => {
-    try {
-      setLoading(true);
+  const query = useMemo(() => {
+    return new URLSearchParams({
+      page,
+      limit: 6,
+      ...(debouncedFilters.destination && { destination: debouncedFilters.destination }),
+      ...(debouncedFilters.transportMode && { transportMode: debouncedFilters.transportMode }),
+      ...(debouncedFilters.minBudget && { minBudget: debouncedFilters.minBudget }),
+      ...(debouncedFilters.maxBudget && { maxBudget: debouncedFilters.maxBudget }),
+      ...(debouncedFilters.minRating && { minRating: debouncedFilters.minRating }),
+      ...(debouncedFilters.sortBy && { sortBy: debouncedFilters.sortBy }),
+    }).toString();
+  }, [page, debouncedFilters]);
 
-      const query = new URLSearchParams({
-        page,
-        limit: 6,
-
-        ...(filters.destination && {
-          destination: filters.destination,
-        }),
-
-        ...(filters.transportMode && {
-          transportMode: filters.transportMode,
-        }),
-
-        ...(filters.minBudget && {
-          minBudget: filters.minBudget,
-        }),
-
-        ...(filters.maxBudget && {
-          maxBudget: filters.maxBudget,
-        }),
-
-        ...(filters.minRating && {
-          minRating: filters.minRating,
-        }),
-
-        ...(filters.sortBy && {
-          sortBy: filters.sortBy,
-        }),
-      }).toString();
-
-      const res = await axios.get(
-        `/trips/feed?${query}`
-      );
-
-      setTrips(res.data.Trips);
-
-      setTotalPages(res.data.totalPages);
-
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // FETCH ON PAGE/FILTER CHANGE
   useEffect(() => {
+    const fetchTrips = async () => {
+      abortControllerRef.current?.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      try {
+        setLoading(true);
+        const res = await axios.get(`/trips/feed?${query}`, {
+          signal: controller.signal,
+        });
+        setTrips(res.data.Trips);
+        setTotalPages(res.data.totalPages);
+      } catch (err) {
+        if (err.name !== "CanceledError") {
+          console.error(err);
+        }
+      } finally {
+        if (abortControllerRef.current === controller) {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchTrips();
-  }, [page, filters]);
+    return () => abortControllerRef.current?.abort();
+  }, [query]);
 
   return (
     <div className="min-h-screen bg-sectionBg px-3 py-5 sm:px-4 lg:px-6">
-
       <div className="mx-auto ">
-
-        {/* HEADER */}
         <div className="mb-6 sm:mb-8">
-
           <h1 className="text-2xl font-bold text-headingText sm:text-3xl">
             Explore Travel Experiences
           </h1>
-
           <p className="mt-2 text-sm text-mutedText sm:text-base">
-            Discover real trips, hidden gems and
-            travel budgets shared by travelers ✨
+            Discover real trips, hidden gems and travel budgets shared by travelers ✨
           </p>
-
         </div>
 
-        {/* FILTERS */}
         <div className="mb-6 rounded-2xl bg-cardBg p-4 shadow sm:mb-8 sm:p-5">
-
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-
-            {/* Destination */}
             <input
               type="text"
               name="destination"
@@ -117,40 +110,20 @@ const TripsFeed = () => {
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
-            {/* Transport */}
             <select
               name="transportMode"
               value={filters.transportMode}
               onChange={handleChange}
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
-              <option value="">
-                Transport
-              </option>
-
-              <option value="train">
-                Train
-              </option>
-
-              <option value="flight">
-                Flight
-              </option>
-
-              <option value="bus">
-                Bus
-              </option>
-
-              <option value="car">
-                Car
-              </option>
-
-              <option value="bike">
-                Bike
-              </option>
-
+              <option value="">Transport</option>
+              <option value="train">Train</option>
+              <option value="flight">Flight</option>
+              <option value="bus">Bus</option>
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
             </select>
 
-            {/* Min Budget */}
             <input
               type="number"
               name="minBudget"
@@ -160,7 +133,6 @@ const TripsFeed = () => {
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
-            {/* Max Budget */}
             <input
               type="number"
               name="maxBudget"
@@ -170,126 +142,73 @@ const TripsFeed = () => {
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             />
 
-            {/* Rating */}
             <select
               name="minRating"
               value={filters.minRating}
               onChange={handleChange}
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
-              <option value="">
-                Rating
-              </option>
-
-              <option value="5">
-                5 Star
-              </option>
-
-              <option value="4">
-                4+ Star
-              </option>
-
-              <option value="3">
-                3+ Star
-              </option>
-
+              <option value="">Rating</option>
+              <option value="5">5 Star</option>
+              <option value="4">4+ Star</option>
+              <option value="3">3+ Star</option>
             </select>
 
-            {/* Sort */}
             <select
               name="sortBy"
               value={filters.sortBy}
               onChange={handleChange}
               className="w-full rounded-xl border border-borderMain bg-cardBg p-3 text-sm text-headingText outline-none focus:ring-2 focus:ring-focusRing"
             >
-              <option value="">
-                Sort By
-              </option>
-
-              <option value="budget_low">
-                Budget Low
-              </option>
-
-              <option value="budget_high">
-                Budget High
-              </option>
-
-              <option value="rating_high">
-                Highest Rated
-              </option>
-
+              <option value="">Sort By</option>
+              <option value="budget_low">Budget Low</option>
+              <option value="budget_high">Budget High</option>
+              <option value="rating_high">Highest Rated</option>
             </select>
-
           </div>
-
         </div>
 
-        {/* LOADING */}
         {loading ? (
-          <div className="text-center py-20">
-            Loading Trips...
-          </div>
+          <div className="text-center py-20">Loading Trips...</div>
         ) : (
           <>
-            {/* TRIPS GRID */}
             {trips.length > 0 ? (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-
                 {trips.map((trip) => (
-                  <TripCard
-                    key={trip._id}
-                    trip={trip}
-                  />
+                  <TripCard key={trip._id} trip={trip} />
                 ))}
-
               </div>
             ) : (
               <div className="rounded-2xl bg-cardBg p-6 text-center shadow sm:p-10">
-                <h2 className="text-2xl font-semibold">
-                  No Trips Found 😢
-                </h2>
-
-                <p className="mt-2 text-sm text-mutedText sm:text-base">
-                  Try changing filters
-                </p>
+                <h2 className="text-2xl font-semibold">No Trips Found 😢</h2>
+                <p className="mt-2 text-sm text-mutedText sm:text-base">Try changing filters</p>
               </div>
             )}
 
-            {/* PAGINATION */}
             {trips.length > 0 && (
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4">
-
                 <button
-                  onClick={() =>
-                    setPage((prev) => prev - 1)
-                  }
+                  onClick={() => setPage((prev) => prev - 1)}
                   disabled={page === 1}
                   className="rounded-xl bg-activeBg px-4 py-2 disabled:opacity-50 sm:px-5"
                 >
                   Prev
                 </button>
-
                 <span className="font-medium">
                   Page {page} of {totalPages}
                 </span>
-
                 <button
-                  onClick={() =>
-                    setPage((prev) => prev + 1)
-                  }
+                  onClick={() => setPage((prev) => prev + 1)}
                   disabled={page === totalPages}
                   className="rounded-xl bg-buttonPrimaryBg px-4 py-2 text-inverseText disabled:opacity-50 sm:px-5"
                 >
                   Next
                 </button>
-
               </div>
             )}
           </>
         )}
-
       </div>
-
     </div>
   );
 };
