@@ -19,16 +19,31 @@ import { useAuth } from "./context/AuthContext";
 // shipping a mobile debug console to every production user. It's now
 // initialized once, dev-only, in main.jsx.
 
+// A small, reusable spinner instead of a bare "Loading..." line — used
+// only where a route genuinely needs to know login state before
+// deciding what to render, not for the whole app.
+function RouteLoading() {
+  return (
+    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600" />
+      <p className="text-sm text-mutedText">Just a moment…</p>
+    </div>
+  );
+}
+
 function App() {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-blue-500">Loading...</p>
-      </div>
-    );
-  }
+  // FIX: this used to block the ENTIRE app — including the public
+  // landing page — behind one full-screen "Loading..." until the
+  // /users/profile/view auth check resolved. On Render's free tier,
+  // a cold backend can take 30-50s to wake up, so every visitor
+  // (logged in or not) stared at a blank loading screen for up to a
+  // minute before seeing anything at all. The landing page and other
+  // public routes don't need to know login state to render, so they
+  // no longer wait on it — only the specific routes below (create-trip,
+  // my-trips) that actually branch on `user` show a brief spinner,
+  // and only while `loading` is still true.
 
   return (
     <BrowserRouter>
@@ -43,15 +58,18 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route
             path="create-trip"
-            element={user ? <CreateTrip /> : <Navigate to="/" replace />}
+            element={loading ? <RouteLoading /> : user ? <CreateTrip /> : <Navigate to="/" replace />}
           />
-          <Route path="my-trips" element={user ? <MyTrips /> : <Navigate to="/" replace />} />
+          <Route
+            path="my-trips"
+            element={loading ? <RouteLoading /> : user ? <MyTrips /> : <Navigate to="/" replace />}
+          />
           <Route path="profile" element={<Profile />} />
           <Route path="profile/:id" element={<Profile />} />
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
 
-        <Route path="*" element={<h1>Page Not Found</h1>} />
+        <Route path="*" element={<h1>Page Not Found !</h1>} />
       </Routes>
     </BrowserRouter>
   );

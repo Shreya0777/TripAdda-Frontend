@@ -310,33 +310,56 @@ const TripDetails = () => {
           <Section
             id="itinerary"
             icon="🗓"
-            title={`Itinerary (${trip.itinerary?.days?.length || 0} Days)`}
+            title={
+              trip.itinerary?.itineraryType === "photos"
+                ? `Itinerary (${trip.itinerary?.days?.length || 0} Days)`
+                : "Itinerary"
+            }
             summary="Day-wise plan with places to visit"
           >
-            {trip.itinerary?.itineraryType === "video" &&
-            trip.itinerary?.videoUrl ? (
+            {/* FIX: this only ever handled "video" (via videoUrl) and
+                otherwise assumed itinerary.days always existed with a
+                title/description — but the backend now sends itinerary in
+                one of three shapes depending on itineraryType: a plain
+                rawText string ("text" mode), day-log entries with a photo
+                per day ("photos" mode), or a video URL ("video" mode,
+                unchanged). Each is rendered on its own terms now instead of
+                assuming the "days" shape for anything that isn't video. */}
+            {trip.itinerary?.itineraryType === "video" && trip.itinerary?.videoUrl ? (
               <video
                 controls
                 className="mt-4 max-h-[400px] w-full rounded-xl object-cover"
               >
                 <source src={trip.itinerary.videoUrl} />
               </video>
-            ) : (
+            ) : trip.itinerary?.itineraryType === "photos" ? (
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {trip.itinerary?.days?.map((item, index) => (
-                  <div key={index} className="rounded-xl bg-hoverBg p-4">
-                    <p className="text-sm font-medium text-primary">
-                      Day {item.day}
-                    </p>
-                    <h4 className="mt-1 font-semibold text-headingText">
-                      {item.title}
-                    </h4>
-                    <p className="mt-1 text-sm text-mutedText">
-                      {item.description}
-                    </p>
-                  </div>
-                ))}
+                {trip.itinerary?.days
+                  ?.slice()
+                  .sort((a, b) => (a.day || 0) - (b.day || 0))
+                  .map((item, index) => (
+                    <div key={index} className="overflow-hidden rounded-xl bg-hoverBg">
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt={`Day ${item.day}`}
+                          className="h-40 w-full object-cover"
+                        />
+                      )}
+                      <div className="p-4">
+                        <p className="text-sm font-medium text-primary">Day {item.day}</p>
+                        <p className="mt-1 text-sm text-mutedText">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                {(!trip.itinerary?.days || trip.itinerary.days.length === 0) && (
+                  <p className="text-sm text-mutedText">No day-log entries were added.</p>
+                )}
               </div>
+            ) : (
+              <p className="mt-4 whitespace-pre-line text-sm text-bodyText">
+                {trip.itinerary?.rawText || "No itinerary details were added."}
+              </p>
             )}
           </Section>
 
