@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import CreateTrip from "./pages/CreateTrip";
 import AuthSuccess from "./pages/AuthSuccess";
 import LandingPage from "./Landing/LandingPage";
+import RouteLoading from "./Components/RouteLoading";
 
 import TripDetails from "./Components/TripDetails";
 import MyTrips from "./Components/My-Trips";
@@ -18,18 +19,6 @@ import { useAuth } from "./context/AuthContext";
 // FIX: eruda.init() was called here AND in main.jsx, unconditionally,
 // shipping a mobile debug console to every production user. It's now
 // initialized once, dev-only, in main.jsx.
-
-// A small, reusable spinner instead of a bare "Loading..." line — used
-// only where a route genuinely needs to know login state before
-// deciding what to render, not for the whole app.
-function RouteLoading() {
-  return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600" />
-      <p className="text-sm text-mutedText">Just a moment…</p>
-    </div>
-  );
-}
 
 function App() {
   const { user, loading } = useAuth();
@@ -69,7 +58,7 @@ function App() {
           <Route path="trips/:id" element={<TripDetails />} />
         </Route>
 
-        <Route path="*" element={<h1>Page Not Found !</h1>} />
+        <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
     </BrowserRouter>
   );
