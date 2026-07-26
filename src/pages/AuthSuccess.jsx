@@ -5,17 +5,25 @@ const AuthSuccess = () => {
   useEffect(() => {
     const verifyLogin = async () => {
       try {
+        // FIX: the backend now also sends the token in this URL
+        // (?token=...) as a fallback, since the cookie set right before
+        // this redirect is cross-site (Render backend, Vercel frontend)
+        // and browsers can silently drop it. Storing it here means the
+        // axios interceptor can attach it as a header on the very next
+        // request, instead of that request depending on a cookie that
+        // may not have survived the redirect.
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        if (token) {
+          localStorage.setItem("token", token);
+        }
+
         const res = await axios.get("/users/profile/view", {
           withCredentials: true,
         });
 
         window.location.replace("/home");
       } catch (error) {
-        // FIX: logged only to the console before, then redirected to
-        // "/login" — a route that doesn't exist in this app (auth is
-        // modal-based, not page-based), producing a real "Page Not
-        // Found." Redirecting to "/" instead, since that's a route that
-        // actually exists and where the login modal can be reopened.
         console.error(
           "Google auth verify failed:",
           error.response?.status,
