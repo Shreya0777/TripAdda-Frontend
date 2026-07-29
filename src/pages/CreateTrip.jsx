@@ -8,12 +8,21 @@ import Select from "../Components/common/Select";
 import Textarea from "../Components/common/Textarea";
 import StarRating from "../Components/common/StarRating";
 import TagInput from "../Components/common/TagInput";
+import LocationAutocomplete from "../Components/common/LocationAutocomplete";
 import StepProgress from "../Components/CreateTrip/StepProgress";
 import MediaUploader from "../Components/CreateTrip/MediaUploader";
-import DayLogJournal from "../Components/CreateTrip/Daylogjournal";
+import DayLogJournal from "../Components/CreateTrip/DayLogJournal";
 import BudgetSplit, { estimateCosts } from "../Components/CreateTrip/BudgetSplit";
 import { useDraftAutosave } from "../hooks/useDraftAutosave";
 
+// FIX: cut down significantly based on feedback from real people who
+// tried the earlier, longer version — dropped Transport Details, Stay
+// Details, Food Recommendations, and per-category sub-ratings entirely.
+// Kept only what people actually said they wanted: title/destination,
+// description, itinerary, cost breakdown, media, and a suggestions/tip
+// field. `boardingPoint` and `overallRating` are still collected because
+// the backend requires them, but folded into compact steps rather than
+// given their own dedicated sections.
 const INITIAL_FORM = {
   title: "",
   description: "",
@@ -21,19 +30,8 @@ const INITIAL_FORM = {
   city: "",
   state: "",
   country: "India",
-
   boardingPoint: "",
-
   duration: "",
-  tripType: "",
-  bestTimeToVisit: "",
-
-  transportMode: "",
-  transportName: "",
-  transportRoute: "",
-  transportDuration: "",
-  transportFare: "",
-  transportTips: [],
 
   totalBudget: "",
   costPerPerson: "",
@@ -41,52 +39,26 @@ const INITIAL_FORM = {
   foodCost: "",
   transportCost: "",
   sightseeingCost: "",
-  otherCost: "", // FIX: existed in schema/backend but had no input before
-
-  hotelName: "",
-  stayLocation: "",
-  pricePerNight: "",
-  stayType: "",
-  stayRating: "",
-  stayReview: "",
-  worthIt: true,
-
-  mustTryFoods: [],
-  cafes: [],
-  budgetFoodOptions: [],
+  otherCost: "",
 
   itineraryType: "text",
   itineraryText: "",
   itineraryVideoUrl: "",
 
   travelerTips: [],
-
   overallRating: "",
-  budgetRating: "",
-  safetyRating: "",
-  foodRating: "",
-  stayRatingValue: "",
-  transportRating: "",
-  experienceRating: "", // FIX: existed in schema/backend but had no input before
-
-  tags: [],
 };
 
 const STEPS = [
   { id: "basics", label: "Basics" },
-  { id: "transport-budget", label: "Transport & Budget" },
-  { id: "stay-food", label: "Stay & Food" },
-  { id: "itinerary", label: "Itinerary & Experience" },
-  { id: "ratings-tags", label: "Ratings & Tags" },
+  { id: "description", label: "Description" },
+  { id: "itinerary", label: "Itinerary" },
+  { id: "cost", label: "Cost Breakdown" },
   { id: "media", label: "Media" },
+  { id: "suggestions", label: "Suggestions & Rating" },
   { id: "review", label: "Review" },
 ];
 
-// FIX (cold-start friction): only the fields the backend actually
-// requires block moving forward / publishing. Everything else is
-// genuinely optional, so a first-time contributor can get through this
-// in a couple of minutes rather than facing ~40 fields as equally
-// mandatory.
 function validateStep(stepIndex, form, dayLogEntries = []) {
   const errors = {};
 
@@ -98,14 +70,10 @@ function validateStep(stepIndex, form, dayLogEntries = []) {
   }
 
   if (stepIndex === 1) {
-    if (!form.transportMode) errors.transportMode = "Required";
-    if (!form.totalBudget) errors.totalBudget = "Required";
-    if (!form.costPerPerson) errors.costPerPerson = "Required";
+    if (!form.description.trim()) errors.description = "Required";
   }
 
-  if (stepIndex === 3) {
-    if (!form.description.trim()) errors.description = "Required";
-
+  if (stepIndex === 2) {
     if (form.itineraryType === "text" && !form.itineraryText.trim()) {
       errors.itineraryText = "Required";
     }
@@ -115,7 +83,12 @@ function validateStep(stepIndex, form, dayLogEntries = []) {
     }
   }
 
-  if (stepIndex === 4) {
+  if (stepIndex === 3) {
+    if (!form.totalBudget) errors.totalBudget = "Required";
+    if (!form.costPerPerson) errors.costPerPerson = "Required";
+  }
+
+  if (stepIndex === 5) {
     if (!form.overallRating) errors.overallRating = "Required";
   }
 
@@ -135,10 +108,9 @@ const CreateTrip = () => {
 
   const [form, setForm] = useState(INITIAL_FORM);
   const [media, setMedia] = useState([]);
-  const [dayLogEntries, setDayLogEntries] = useState([]); // #1/#4: photo-journal entries
-  const [budgetMode, setBudgetMode] = useState("estimate"); // #2: estimate vs exact
+  const [dayLogEntries, setDayLogEntries] = useState([]);
+  const [budgetMode, setBudgetMode] = useState("estimate");
   const [budgetPreset, setBudgetPreset] = useState("even");
-  const [touchedRatings, setTouchedRatings] = useState(new Set()); // #3: which sub-ratings the user manually set
   const [currentStep, setCurrentStep] = useState(0);
   const [furthestStep, setFurthestStep] = useState(0);
   const [errors, setErrors] = useState({});
@@ -147,7 +119,6 @@ const CreateTrip = () => {
 
   const { restoredDraft, hasCheckedForDraft, saveDraft, clearDraft } = useDraftAutosave();
 
-  // Offer to restore a draft once, right after mount.
   useEffect(() => {
     if (!hasCheckedForDraft || !restoredDraft) return;
 
@@ -168,9 +139,6 @@ const CreateTrip = () => {
               onClick={() => {
                 setForm({ ...INITIAL_FORM, ...restoredDraft.form });
                 if (restoredDraft.dayLogEntries) {
-                  // Captions/day numbers come back; the file itself never
-                  // could be persisted, so it's simply absent (`file: null`)
-                  // until the user re-attaches a photo for that entry.
                   setDayLogEntries(
                     restoredDraft.dayLogEntries.map((e) => ({ day: e.day, caption: e.caption, file: null })),
                   );
@@ -199,41 +167,14 @@ const CreateTrip = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasCheckedForDraft, restoredDraft]);
 
-  // Autosave text fields on every change. Media/photo files themselves
-  // can't be persisted (browser limitation) — only lightweight metadata
-  // is saved so the restore prompt is honest about what's recoverable.
   useEffect(() => {
     const mediaMeta = media.map((f) => ({ name: f.name, size: f.size }));
     const dayLogMeta = dayLogEntries.map((e) => ({ day: e.day, caption: e.caption, hadFile: !!e.file }));
     saveDraft(form, mediaMeta, dayLogMeta, budgetMode, budgetPreset);
   }, [form, media, dayLogEntries, budgetMode, budgetPreset, saveDraft]);
 
-
-  const SUB_RATING_FIELDS = ["budgetRating", "safetyRating", "foodRating", "stayRatingValue", "transportRating", "experienceRating"];
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "overallRating") {
-      // FIX (#3): most people have one overall gut feeling about a trip,
-      // not seven independently-considered ratings. Setting the overall
-      // rating defaults every sub-rating the user hasn't touched yet to
-      // match it — they can still override any individual one afterward.
-      setForm((prev) => {
-        const next = { ...prev, overallRating: value };
-        SUB_RATING_FIELDS.forEach((field) => {
-          if (!touchedRatings.has(field)) next[field] = value;
-        });
-        return next;
-      });
-      setErrors((prev) => ({ ...prev, overallRating: undefined }));
-      return;
-    }
-
-    if (SUB_RATING_FIELDS.includes(name)) {
-      setTouchedRatings((prev) => new Set(prev).add(name));
-    }
-
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
@@ -277,10 +218,6 @@ const CreateTrip = () => {
 
       const formData = new FormData();
 
-      // #2: if the user picked "estimate" mode, the sub-cost fields were
-      // never filled in directly — compute them from the total budget +
-      // chosen split right before sending, so the backend still just
-      // sees plain numbers (no schema/route changes needed for this part).
       const budgetOverrides =
         budgetMode === "estimate" ? estimateCosts(form.totalBudget, budgetPreset) : {};
 
@@ -296,9 +233,6 @@ const CreateTrip = () => {
 
       media.forEach((file) => formData.append("media", file));
 
-      // #1/#4: send the day-log journal as captions/day-numbers (JSON)
-      // plus the actual photo files, only for entries that have one —
-      // `hasFile` tells the backend how to line the two arrays back up.
       if (form.itineraryType === "photos") {
         const entriesMeta = dayLogEntries.map((entry) => ({
           day: entry.day,
@@ -338,7 +272,7 @@ const CreateTrip = () => {
             Share Your Travel Experience
           </h1>
           <p className="mt-2 text-sm text-mutedText sm:text-base">
-            Help travelers with real experiences, budget insights and hidden gems ✨
+            Real trips, real budgets, real tips — the short version ✨
           </p>
         </div>
 
@@ -351,175 +285,98 @@ const CreateTrip = () => {
         />
 
         <div className="rounded-2xl bg-cardBg p-4 shadow sm:p-6">
-          {/* STEP 1 — BASICS */}
           {currentStep === 0 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-bold text-primary sm:text-xl">🧭 Basic Information</h2>
+              <h2 className="text-lg font-bold text-primary sm:text-xl">🧭 Basics</h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Input label="Trip Title *" name="title" value={form.title} onChange={handleChange} error={errors.title} />
-                <Input label="Boarding Point *" name="boardingPoint" value={form.boardingPoint} onChange={handleChange} error={errors.boardingPoint} />
                 <Input label="City *" name="city" value={form.city} onChange={handleChange} error={errors.city} />
                 <Input label="State" name="state" value={form.state} onChange={handleChange} />
-                <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+                <LocationAutocomplete
+                  label="Boarding Point *"
+                  name="boardingPoint"
+                  value={form.boardingPoint}
+                  onChange={handleChange}
+                  error={errors.boardingPoint}
+                  placeholder="e.g. Akshardham"
+                  required
+                />
                 <Input label="Duration (days) *" name="duration" type="number" value={form.duration} onChange={handleChange} error={errors.duration} />
-                <Select label="Trip Type" name="tripType" value={form.tripType} onChange={handleChange} options={["solo", "friends", "family", "couple"]} />
-                <Input label="Best Time To Visit" name="bestTimeToVisit" value={form.bestTimeToVisit} onChange={handleChange} />
               </div>
             </div>
           )}
 
-          {/* STEP 2 — TRANSPORT & BUDGET */}
           {currentStep === 1 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🚗 Transport</h2>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <Select label="Transport Mode *" name="transportMode" value={form.transportMode} onChange={handleChange} options={["train", "flight", "bus", "car", "bike", "other"]} error={errors.transportMode} />
-                  <Input label="Transport Name" name="transportName" value={form.transportName} onChange={handleChange} />
-                  <Input label="Route" name="transportRoute" value={form.transportRoute} onChange={handleChange} />
-                  <Input label="Travel Duration (e.g. 6 hours)" name="transportDuration" value={form.transportDuration} onChange={handleChange} />
-                  <Input label="Transport Fare" name="transportFare" type="number" value={form.transportFare} onChange={handleChange} />
-                </div>
-                <div className="mt-4">
-                  <TagInput label="Transport Tips" name="transportTips" value={form.transportTips} onChange={handleChange} placeholder="Type a tip and press Enter" />
-                </div>
-              </div>
+            <div>
+              <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">✨ Tell the story</h2>
+              <Textarea
+                label="Description *"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                error={errors.description}
+                placeholder="What was this trip like? What should someone know before planning the same one?"
+              />
+            </div>
+          )}
 
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💰 Budget Details</h2>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Input label="Total Budget *" name="totalBudget" type="number" value={form.totalBudget} onChange={handleChange} error={errors.totalBudget} />
-                  <Input label="Cost Per Person *" name="costPerPerson" type="number" value={form.costPerPerson} onChange={handleChange} error={errors.costPerPerson} />
-                </div>
+          {currentStep === 2 && (
+            <div>
+              <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🗓 Itinerary</h2>
+              <Select label="Itinerary Type" name="itineraryType" value={form.itineraryType} onChange={handleChange} options={["text", "photos", "video"]} />
+              {form.itineraryType === "text" && (
                 <div className="mt-4">
-                  <BudgetSplit
-                    form={form}
-                    budgetMode={budgetMode}
-                    setBudgetMode={setBudgetMode}
-                    budgetPreset={budgetPreset}
-                    setBudgetPreset={setBudgetPreset}
+                  <Textarea
+                    label="Day Wise Itinerary *"
+                    name="itineraryText"
+                    value={form.itineraryText}
                     onChange={handleChange}
+                    error={errors.itineraryText}
+                    placeholder={"Day 1 - Arrival and local market\nDay 2 - Sightseeing\nDay 3 - Cafe hopping"}
                   />
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3 — STAY & FOOD */}
-          {currentStep === 2 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🏨 Stay Details</h2>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <Input label="Hotel/Stay Name" name="hotelName" value={form.hotelName} onChange={handleChange} />
-                  <Input label="Stay Location" name="stayLocation" value={form.stayLocation} onChange={handleChange} />
-                  <Input label="Price Per Night" name="pricePerNight" type="number" value={form.pricePerNight} onChange={handleChange} />
-                  <Select label="Stay Type" name="stayType" value={form.stayType} onChange={handleChange} options={["hotel", "hostel", "homestay", "resort", "airbnb"]} />
-                  <StarRating label="Stay Rating" name="stayRating" value={form.stayRating} onChange={handleChange} />
-                </div>
+              )}
+              {form.itineraryType === "photos" && (
                 <div className="mt-4">
-                  <Textarea label="Stay Review" name="stayReview" value={form.stayReview} onChange={handleChange} />
+                  <DayLogJournal entries={dayLogEntries} onChange={setDayLogEntries} />
+                  {errors.dayLog && <p className="mt-2 text-sm text-red-500">{errors.dayLog}</p>}
                 </div>
-                {/* FIX: `worthIt` existed in the schema/backend but had no
-                    input anywhere in the original form — same class of bug
-                    as otherCost/experienceRating. */}
-                <div className="mt-4 flex items-center gap-3">
-                  <label className="text-sm font-medium text-gray-700">Was the stay worth the money?</label>
-                  <button
-                    type="button"
-                    onClick={() => setForm((prev) => ({ ...prev, worthIt: !prev.worthIt }))}
-                    className={`rounded-full px-4 py-1 text-sm font-medium transition ${
-                      form.worthIt ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {form.worthIt ? "Yes 👍" : "No 👎"}
-                  </button>
+              )}
+              {form.itineraryType === "video" && (
+                <div className="mt-4">
+                  <Input
+                    label="Itinerary Video URL"
+                    name="itineraryVideoUrl"
+                    value={form.itineraryVideoUrl}
+                    onChange={handleChange}
+                    placeholder="Link to your trip video (YouTube, Drive, etc.)"
+                  />
                 </div>
-              </div>
-
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🍜 Food Recommendations</h2>
-                <div className="space-y-4">
-                  <TagInput label="Must Try Foods" name="mustTryFoods" value={form.mustTryFoods} onChange={handleChange} placeholder="Add a dish and press Enter" />
-                  <TagInput label="Best Cafes" name="cafes" value={form.cafes} onChange={handleChange} placeholder="Add a cafe and press Enter" />
-                  <TagInput label="Budget Food Options" name="budgetFoodOptions" value={form.budgetFoodOptions} onChange={handleChange} placeholder="Add an option and press Enter" />
-                </div>
-              </div>
+              )}
             </div>
           )}
 
-          {/* STEP 4 — ITINERARY & EXPERIENCE */}
           {currentStep === 3 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🗓 Itinerary</h2>
-                <Select label="Itinerary Type" name="itineraryType" value={form.itineraryType} onChange={handleChange} options={["text", "photos", "video"]} />
-                {form.itineraryType === "text" && (
-                  <div className="mt-4">
-                    <Textarea
-                      label="Day Wise Itinerary *"
-                      name="itineraryText"
-                      value={form.itineraryText}
-                      onChange={handleChange}
-                      error={errors.itineraryText}
-                      placeholder={`Day 1 - Arrival and local market\nDay 2 - Sightseeing\nDay 3 - Cafe hopping`}
-                    />
-                  </div>
-                )}
-                {form.itineraryType === "photos" && (
-                  <div className="mt-4">
-                    <DayLogJournal entries={dayLogEntries} onChange={setDayLogEntries} />
-                    {errors.dayLog && <p className="mt-2 text-sm text-red-500">{errors.dayLog}</p>}
-                  </div>
-                )}
-                {form.itineraryType === "video" && (
-                  <div className="mt-4">
-                    <Input
-                      label="Itinerary Video URL"
-                      name="itineraryVideoUrl"
-                      value={form.itineraryVideoUrl || ""}
-                      onChange={handleChange}
-                      placeholder="Link to your trip video (YouTube, Drive, etc.)"
-                    />
-                  </div>
-                )}
+            <div>
+              <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💰 Cost Breakdown</h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Input label="Total Budget *" name="totalBudget" type="number" value={form.totalBudget} onChange={handleChange} error={errors.totalBudget} />
+                <Input label="Cost Per Person *" name="costPerPerson" type="number" value={form.costPerPerson} onChange={handleChange} error={errors.costPerPerson} />
               </div>
-
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">✨ Travel Experience</h2>
-                <Textarea label="Description *" name="description" value={form.description} onChange={handleChange} error={errors.description} />
-                <div className="mt-4">
-                  <TagInput label="Traveler Tips" name="travelerTips" value={form.travelerTips} onChange={handleChange} placeholder="Add a tip and press Enter" />
-                </div>
+              <div className="mt-4">
+                <BudgetSplit
+                  form={form}
+                  budgetMode={budgetMode}
+                  setBudgetMode={setBudgetMode}
+                  budgetPreset={budgetPreset}
+                  setBudgetPreset={setBudgetPreset}
+                  onChange={handleChange}
+                />
               </div>
             </div>
           )}
 
-          {/* STEP 5 — RATINGS & TAGS */}
           {currentStep === 4 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">⭐ Ratings</h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                  <StarRating label="Overall Rating" name="overallRating" value={form.overallRating} onChange={handleChange} error={errors.overallRating} required />
-                  <StarRating label="Budget Rating" name="budgetRating" value={form.budgetRating} onChange={handleChange} />
-                  <StarRating label="Safety Rating" name="safetyRating" value={form.safetyRating} onChange={handleChange} />
-                  <StarRating label="Food Rating" name="foodRating" value={form.foodRating} onChange={handleChange} />
-                  <StarRating label="Stay Rating" name="stayRatingValue" value={form.stayRatingValue} onChange={handleChange} />
-                  <StarRating label="Transport Rating" name="transportRating" value={form.transportRating} onChange={handleChange} />
-                  <StarRating label="Experience Rating" name="experienceRating" value={form.experienceRating} onChange={handleChange} />
-                </div>
-              </div>
-
-              <div>
-                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🏷 Tags</h2>
-                <TagInput label="Tags" name="tags" value={form.tags} onChange={handleChange} placeholder="Add a tag and press Enter" />
-              </div>
-            </div>
-          )}
-
-          {/* STEP 6 — MEDIA */}
-          {currentStep === 5 && (
             <div>
               <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🖼 Upload Media</h2>
               <MediaUploader
@@ -530,7 +387,19 @@ const CreateTrip = () => {
             </div>
           )}
 
-          {/* STEP 7 — REVIEW */}
+          {currentStep === 5 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💡 Suggestions for other travelers</h2>
+                <TagInput label="Tips" name="travelerTips" value={form.travelerTips} onChange={handleChange} placeholder="Add a tip and press Enter" />
+              </div>
+              <div>
+                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">⭐ Overall Rating</h2>
+                <StarRating label="How was the trip overall?" name="overallRating" value={form.overallRating} onChange={handleChange} error={errors.overallRating} required />
+              </div>
+            </div>
+          )}
+
           {currentStep === 6 && (
             <div className="space-y-4">
               <h2 className="text-lg font-bold text-primary sm:text-xl">✅ Review & Publish</h2>
@@ -557,20 +426,17 @@ const CreateTrip = () => {
               <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <p><span className="text-gray-500">Title:</span> {form.title || "—"}</p>
                 <p><span className="text-gray-500">Destination:</span> {form.city || "—"}</p>
-                <p><span className="text-gray-500">Duration:</span> {form.duration ? `${form.duration} days` : "—"}</p>
+                <p><span className="text-gray-500">Duration:</span> {form.duration ? form.duration + " days" : "—"}</p>
                 <p><span className="text-gray-500">Total Budget:</span> {form.totalBudget || "—"}</p>
-                <p><span className="text-gray-500">Overall Rating:</span> {form.overallRating ? `${form.overallRating}/5` : "—"}</p>
+                <p><span className="text-gray-500">Overall Rating:</span> {form.overallRating ? form.overallRating + "/5" : "—"}</p>
                 <p><span className="text-gray-500">Media attached:</span> {media.length}</p>
-                {form.itineraryType === "photos" && (
-                  <p><span className="text-gray-500">Day-log entries:</span> {dayLogEntries.filter((e) => e.caption.trim()).length}</p>
-                )}
               </div>
 
               {loading && (
                 <div className="w-full rounded-full bg-gray-200">
                   <div
                     className="rounded-full bg-blue-600 py-1 text-center text-xs text-white transition-all"
-                    style={{ width: `${Math.max(uploadPercent, 5)}%` }}
+                    style={{ width: Math.max(uploadPercent, 5) + "%" }}
                   >
                     {uploadPercent}%
                   </div>
@@ -580,7 +446,6 @@ const CreateTrip = () => {
           )}
         </div>
 
-        {/* NAVIGATION */}
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -606,7 +471,7 @@ const CreateTrip = () => {
               disabled={loading}
               className="rounded-xl bg-buttonPrimaryBg px-6 py-3 text-inverseText hover:bg-buttonPrimaryHoverBg disabled:opacity-60"
             >
-              {loading ? `Publishing… ${uploadPercent}%` : "Publish Experience"}
+              {loading ? "Publishing… " + uploadPercent + "%" : "Publish Experience"}
             </button>
           )}
         </div>
