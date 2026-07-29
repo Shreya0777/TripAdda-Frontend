@@ -11,7 +11,7 @@ import TagInput from "../Components/common/TagInput";
 import LocationAutocomplete from "../Components/common/LocationAutocomplete";
 import StepProgress from "../Components/CreateTrip/StepProgress";
 import MediaUploader from "../Components/CreateTrip/MediaUploader";
-import DayLogJournal from "../Components/CreateTrip/DayLogJournal";
+import DayLogJournal from "../Components/CreateTrip/Daylogjournal";
 import BudgetSplit, { estimateCosts } from "../Components/CreateTrip/BudgetSplit";
 import { useDraftAutosave } from "../hooks/useDraftAutosave";
 
