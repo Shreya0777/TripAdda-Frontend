@@ -79,6 +79,8 @@ function validateStep(stepIndex, form, dayLogEntries = []) {
 
   if (stepIndex === 1) {
     if (!form.description.trim()) errors.description = "Required";
+    else if (form.description.trim().length < 50)
+      errors.description = "Description must be at least 50 characters";
 
     if (form.itineraryType === "text" && !form.itineraryText.trim()) {
       errors.itineraryText = "Required";
@@ -336,6 +338,13 @@ const CreateTrip = () => {
                   error={errors.description}
                   placeholder="What was this trip like? What should someone know before planning the same one?"
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    form.description.trim().length < 50 ? "text-mutedText" : "text-green-600"
+                  }`}
+                >
+                  {form.description.trim().length}/50 characters minimum
+                </p>
               </div>
 
               <div>

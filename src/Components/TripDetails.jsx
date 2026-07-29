@@ -7,7 +7,6 @@ const TripDetails = () => {
   const navigate = useNavigate();
 
   const [trip, setTrip] = useState(null);
-  const [openSection, setOpenSection] = useState("itinerary");
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -24,44 +23,29 @@ const TripDetails = () => {
 
   if (!trip) return <div className="p-10 text-center">Loading...</div>;
 
-  const toggleSection = (section) => {
-    setOpenSection(openSection === section ? null : section);
-  };
-
   const userName = trip.userId?.name || trip.userId?.username || "Traveler";
   const userImage =
     trip.userId?.photoURL ||
     "https://tse2.mm.bing.net/th/id/OIP.9k6NZTQk5G6g5PVDDDeLiAHaHa?pid=Api&P=0&h=180";
 
-  const Section = ({ id, icon, title, summary, children }) => (
+  const Section = ({ icon, title, summary, children }) => (
     <div className="overflow-hidden rounded-xl border border-borderMain bg-cardBg">
-      <button
-        onClick={() => toggleSection(id)}
-        className="flex w-full items-center justify-between gap-3 p-4 text-left"
-      >
-        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-          <span className="text-xl">{icon}</span>
+      <div className="flex items-center gap-3 p-4 sm:gap-4">
+        <span className="text-xl">{icon}</span>
 
-          <div>
-            <h3 className="break-words font-semibold text-headingText">
-              {title}
-            </h3>
-            {summary && (
-              <p className="break-words text-sm text-mutedText">{summary}</p>
-            )}
-          </div>
+        <div className="min-w-0">
+          <h3 className="break-words font-semibold text-headingText">
+            {title}
+          </h3>
+          {summary && (
+            <p className="break-words text-sm text-mutedText">{summary}</p>
+          )}
         </div>
+      </div>
 
-        <span className="text-xl text-mutedText">
-          {openSection === id ? "⌃" : "›"}
-        </span>
-      </button>
-
-      {openSection === id && (
-        <div className="border-t border-borderMain px-4 pb-4 text-bodyText">
-          {children}
-        </div>
-      )}
+      <div className="border-t border-borderMain px-4 pb-4 pt-4 text-bodyText">
+        {children}
+      </div>
     </div>
   );
 
