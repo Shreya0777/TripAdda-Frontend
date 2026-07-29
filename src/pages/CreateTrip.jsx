@@ -37,6 +37,12 @@ const INITIAL_FORM = {
   boardingPoint: "",
   duration: "",
 
+  tripType: "friends",
+  bestTimeToVisit: "",
+
+  transportMode: "",
+  transportFare: "",
+
   totalBudget: "",
   costPerPerson: "",
   stayCost: "",
@@ -300,6 +306,20 @@ const CreateTrip = () => {
                   required
                 />
                 <Input label="Duration (days) *" name="duration" type="number" value={form.duration} onChange={handleChange} error={errors.duration} />
+                <Select
+                  label="Trip Type"
+                  name="tripType"
+                  value={form.tripType}
+                  onChange={handleChange}
+                  options={["solo", "friends", "family", "couple"]}
+                />
+                <Input
+                  label="Best Time to Visit"
+                  name="bestTimeToVisit"
+                  value={form.bestTimeToVisit}
+                  onChange={handleChange}
+                  placeholder="e.g. October to March"
+                />
               </div>
             </div>
           )}
@@ -358,6 +378,21 @@ const CreateTrip = () => {
             <div>
               <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💰 Cost Breakdown</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Select
+                  label="Transport Mode"
+                  name="transportMode"
+                  value={form.transportMode}
+                  onChange={handleChange}
+                  options={["train", "flight", "bus", "car", "bike", "other"]}
+                />
+                <Input
+                  label="Transport Fare"
+                  name="transportFare"
+                  type="number"
+                  value={form.transportFare}
+                  onChange={handleChange}
+                  placeholder="e.g. 2500"
+                />
                 <Input label="Total Budget *" name="totalBudget" type="number" value={form.totalBudget} onChange={handleChange} error={errors.totalBudget} />
                 <Input label="Cost Per Person *" name="costPerPerson" type="number" value={form.costPerPerson} onChange={handleChange} error={errors.costPerPerson} />
               </div>
