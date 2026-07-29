@@ -403,7 +403,7 @@ const CreateTrip = () => {
                   placeholder="e.g. 2500"
                 />
                 <Input label="Total Budget *" name="totalBudget" type="number" value={form.totalBudget} onChange={handleChange} error={errors.totalBudget} />
-                <Input label="Cost Per Person *" name="costPerPerson" type="number" value={form.costPerPerson} onChange={handleChange} error={errors.costPerPerson} />
+                {/* <Input label="Cost Per Person *" name="costPerPerson" type="number" value={form.costPerPerson} onChange={handleChange} error={errors.costPerPerson} /> */}
               </div>
               <div className="mt-4">
                 <BudgetSplit

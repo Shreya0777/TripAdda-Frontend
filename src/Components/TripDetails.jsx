@@ -194,10 +194,10 @@ const TripDetails = () => {
             summary={`Total Budget: ₹${trip.budgetDetails?.totalBudget}`}
           >
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              <p>
+              {/* <p>
                 <strong>Per Person:</strong> ₹
                 {trip.budgetDetails?.costPerPerson}
-              </p>
+              </p> */}
               <p>
                 <strong>Stay:</strong> ₹{trip.budgetDetails?.stayCost}
               </p>
