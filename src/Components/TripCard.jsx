@@ -34,7 +34,7 @@ const TripCard = ({ trip }) => {
             <div>
               <p className="text-xs text-lightText">TOTAL BUDGET</p>
               <p className="text-linkText font-semibold">
-                ₹{trip.budgetDetails?.totalBudget}/person
+                ₹{trip.budgetDetails?.costPerPerson}/person
               </p>
             </div>
 
