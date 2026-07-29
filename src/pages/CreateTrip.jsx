@@ -23,12 +23,16 @@ import { useDraftAutosave } from "../hooks/useDraftAutosave";
 // field. `boardingPoint` and `overallRating` are still collected because
 // the backend requires them, but folded into compact steps rather than
 // given their own dedicated sections.
+//
+// FIX 2: removed `city` / `state` as standalone fields (redundant with
+// boardingPoint for most users and rarely filled in accurately), and
+// merged the Description and Itinerary steps into a single "Story &
+// Itinerary" step since they're really the same narrative in people's
+// heads.
 const INITIAL_FORM = {
   title: "",
   description: "",
 
-  city: "",
-  state: "",
   country: "India",
   boardingPoint: "",
   duration: "",
@@ -51,8 +55,7 @@ const INITIAL_FORM = {
 
 const STEPS = [
   { id: "basics", label: "Basics" },
-  { id: "description", label: "Description" },
-  { id: "itinerary", label: "Itinerary" },
+  { id: "story", label: "Story & Itinerary" },
   { id: "cost", label: "Cost Breakdown" },
   { id: "media", label: "Media" },
   { id: "suggestions", label: "Suggestions & Rating" },
@@ -64,16 +67,13 @@ function validateStep(stepIndex, form, dayLogEntries = []) {
 
   if (stepIndex === 0) {
     if (!form.title.trim()) errors.title = "Required";
-    if (!form.city.trim()) errors.city = "Required";
     if (!form.boardingPoint.trim()) errors.boardingPoint = "Required";
     if (!form.duration) errors.duration = "Required";
   }
 
   if (stepIndex === 1) {
     if (!form.description.trim()) errors.description = "Required";
-  }
 
-  if (stepIndex === 2) {
     if (form.itineraryType === "text" && !form.itineraryText.trim()) {
       errors.itineraryText = "Required";
     }
@@ -83,12 +83,12 @@ function validateStep(stepIndex, form, dayLogEntries = []) {
     }
   }
 
-  if (stepIndex === 3) {
+  if (stepIndex === 2) {
     if (!form.totalBudget) errors.totalBudget = "Required";
     if (!form.costPerPerson) errors.costPerPerson = "Required";
   }
 
-  if (stepIndex === 5) {
+  if (stepIndex === 4) {
     if (!form.overallRating) errors.overallRating = "Required";
   }
 
@@ -290,8 +290,6 @@ const CreateTrip = () => {
               <h2 className="text-lg font-bold text-primary sm:text-xl">🧭 Basics</h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Input label="Trip Title *" name="title" value={form.title} onChange={handleChange} error={errors.title} />
-                <Input label="City *" name="city" value={form.city} onChange={handleChange} error={errors.city} />
-                <Input label="State" name="state" value={form.state} onChange={handleChange} />
                 <LocationAutocomplete
                   label="Boarding Point *"
                   name="boardingPoint"
@@ -307,56 +305,56 @@ const CreateTrip = () => {
           )}
 
           {currentStep === 1 && (
-            <div>
-              <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">✨ Tell the story</h2>
-              <Textarea
-                label="Description *"
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                error={errors.description}
-                placeholder="What was this trip like? What should someone know before planning the same one?"
-              />
+            <div className="space-y-6">
+              <div>
+                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">✨ Tell the story</h2>
+                <Textarea
+                  label="Description *"
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  error={errors.description}
+                  placeholder="What was this trip like? What should someone know before planning the same one?"
+                />
+              </div>
+
+              <div>
+                <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🗓 Itinerary</h2>
+                <Select label="Itinerary Type" name="itineraryType" value={form.itineraryType} onChange={handleChange} options={["text", "photos", "video"]} />
+                {form.itineraryType === "text" && (
+                  <div className="mt-4">
+                    <Textarea
+                      label="Day Wise Itinerary *"
+                      name="itineraryText"
+                      value={form.itineraryText}
+                      onChange={handleChange}
+                      error={errors.itineraryText}
+                      placeholder={"Day 1 - Arrival and local market\nDay 2 - Sightseeing\nDay 3 - Cafe hopping"}
+                    />
+                  </div>
+                )}
+                {form.itineraryType === "photos" && (
+                  <div className="mt-4">
+                    <DayLogJournal entries={dayLogEntries} onChange={setDayLogEntries} />
+                    {errors.dayLog && <p className="mt-2 text-sm text-red-500">{errors.dayLog}</p>}
+                  </div>
+                )}
+                {form.itineraryType === "video" && (
+                  <div className="mt-4">
+                    <Input
+                      label="Itinerary Video URL"
+                      name="itineraryVideoUrl"
+                      value={form.itineraryVideoUrl}
+                      onChange={handleChange}
+                      placeholder="Link to your trip video (YouTube, Drive, etc.)"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {currentStep === 2 && (
-            <div>
-              <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🗓 Itinerary</h2>
-              <Select label="Itinerary Type" name="itineraryType" value={form.itineraryType} onChange={handleChange} options={["text", "photos", "video"]} />
-              {form.itineraryType === "text" && (
-                <div className="mt-4">
-                  <Textarea
-                    label="Day Wise Itinerary *"
-                    name="itineraryText"
-                    value={form.itineraryText}
-                    onChange={handleChange}
-                    error={errors.itineraryText}
-                    placeholder={"Day 1 - Arrival and local market\nDay 2 - Sightseeing\nDay 3 - Cafe hopping"}
-                  />
-                </div>
-              )}
-              {form.itineraryType === "photos" && (
-                <div className="mt-4">
-                  <DayLogJournal entries={dayLogEntries} onChange={setDayLogEntries} />
-                  {errors.dayLog && <p className="mt-2 text-sm text-red-500">{errors.dayLog}</p>}
-                </div>
-              )}
-              {form.itineraryType === "video" && (
-                <div className="mt-4">
-                  <Input
-                    label="Itinerary Video URL"
-                    name="itineraryVideoUrl"
-                    value={form.itineraryVideoUrl}
-                    onChange={handleChange}
-                    placeholder="Link to your trip video (YouTube, Drive, etc.)"
-                  />
-                </div>
-              )}
-            </div>
-          )}
-
-          {currentStep === 3 && (
             <div>
               <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💰 Cost Breakdown</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -376,7 +374,7 @@ const CreateTrip = () => {
             </div>
           )}
 
-          {currentStep === 4 && (
+          {currentStep === 3 && (
             <div>
               <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">🖼 Upload Media</h2>
               <MediaUploader
@@ -387,7 +385,7 @@ const CreateTrip = () => {
             </div>
           )}
 
-          {currentStep === 5 && (
+          {currentStep === 4 && (
             <div className="space-y-6">
               <div>
                 <h2 className="mb-4 text-lg font-bold text-primary sm:text-xl">💡 Suggestions for other travelers</h2>
@@ -400,7 +398,7 @@ const CreateTrip = () => {
             </div>
           )}
 
-          {currentStep === 6 && (
+          {currentStep === 5 && (
             <div className="space-y-4">
               <h2 className="text-lg font-bold text-primary sm:text-xl">✅ Review & Publish</h2>
 
@@ -425,7 +423,7 @@ const CreateTrip = () => {
 
               <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <p><span className="text-gray-500">Title:</span> {form.title || "—"}</p>
-                <p><span className="text-gray-500">Destination:</span> {form.city || "—"}</p>
+                <p><span className="text-gray-500">Boarding Point:</span> {form.boardingPoint || "—"}</p>
                 <p><span className="text-gray-500">Duration:</span> {form.duration ? form.duration + " days" : "—"}</p>
                 <p><span className="text-gray-500">Total Budget:</span> {form.totalBudget || "—"}</p>
                 <p><span className="text-gray-500">Overall Rating:</span> {form.overallRating ? form.overallRating + "/5" : "—"}</p>
