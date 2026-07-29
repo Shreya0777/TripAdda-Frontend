@@ -80,7 +80,7 @@ const TripDetails = () => {
           />
 
           <div className="mt-4">
-            <span className="rounded-full bg-hoverBg px-3 py-1 text-xs text-primary">
+            <span className="rounded-full bg-hoverBg px-3 py-1 text-xs capitalize text-primary">
               {trip.tripType || "Trip"}
             </span>
 
@@ -108,13 +108,22 @@ const TripDetails = () => {
               </div>
             </div>
 
-            <p className="mt-4 text-sm text-mutedText">
-              📍 {trip.destination?.city}, {trip.destination?.state}
-            </p>
-
-            <p className="break-words text-sm text-mutedText">
+            {/* FIX: destination used to be city/state, which we no longer
+                collect on the create form — boardingPoint + country are
+                the only location fields that actually exist now. */}
+            <p className="mt-4 break-words text-sm text-mutedText">
               🚏 From {trip.boardingPoint}
             </p>
+
+            {trip.country && (
+              <p className="text-sm text-mutedText">🌍 {trip.country}</p>
+            )}
+
+            {trip.bestTimeToVisit && (
+              <p className="text-sm text-mutedText">
+                📅 Best time: {trip.bestTimeToVisit}
+              </p>
+            )}
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3">
@@ -151,61 +160,48 @@ const TripDetails = () => {
         {/* RIGHT CONTENT */}
         <div className="space-y-4">
           <Section
-            id="destination"
-            icon="📍"
-            title="Destination"
-            summary={`${trip.destination?.city}, ${trip.destination?.state}`}
-          >
-            <p>
-              {trip.destination?.city}, {trip.destination?.state},{" "}
-              {trip.destination?.country}
-            </p>
-          </Section>
-
-          <Section
             id="boarding"
             icon="🚏"
             title="Boarding Point"
             summary={trip.boardingPoint}
           >
             <p>{trip.boardingPoint}</p>
+            {trip.country && (
+              <p className="mt-1 text-sm text-mutedText">{trip.country}</p>
+            )}
           </Section>
 
-          <Section
-            id="transport"
-            icon="🚌"
-            title="Transport Info"
-            summary={`${trip.transportInfo?.transportName || ""} ${
-              trip.transportInfo?.route || ""
-            }`}
-          >
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <p>
-                <strong>Mode:</strong> {trip.transportInfo?.mode}
-              </p>
-              <p>
-                <strong>Name:</strong> {trip.transportInfo?.transportName}
-              </p>
-              <p>
-                <strong>Route:</strong> {trip.transportInfo?.route}
-              </p>
-              <p>
-                <strong>Duration:</strong> {trip.transportInfo?.duration}
-              </p>
-              <p>
-                <strong>Fare:</strong> ₹{trip.transportInfo?.fare}
-              </p>
-            </div>
-          </Section>
+          {/* FIX: transportInfo now only carries mode + fare — the create
+              form dropped transportName/route/duration, so those are gone
+              from here too rather than silently rendering "undefined". */}
+          {(trip.transportInfo?.mode || trip.transportInfo?.fare) && (
+            <Section
+              id="transport"
+              icon="🚌"
+              title="Transport Info"
+              summary={trip.transportInfo?.mode}
+            >
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <p className="capitalize">
+                  <strong>Mode:</strong> {trip.transportInfo?.mode}
+                </p>
+                <p>
+                  <strong>Fare:</strong> ₹{trip.transportInfo?.fare}
+                </p>
+              </div>
+            </Section>
+          )}
 
-          <Section
-            id="bestTime"
-            icon="📅"
-            title="Best Time to Visit"
-            summary={trip.bestTimeToVisit}
-          >
-            <p>{trip.bestTimeToVisit}</p>
-          </Section>
+          {trip.bestTimeToVisit && (
+            <Section
+              id="bestTime"
+              icon="📅"
+              title="Best Time to Visit"
+              summary={trip.bestTimeToVisit}
+            >
+              <p>{trip.bestTimeToVisit}</p>
+            </Section>
+          )}
 
           <Section
             id="budget"
@@ -234,76 +230,6 @@ const TripDetails = () => {
               <p>
                 <strong>Other:</strong> ₹{trip.budgetDetails?.otherCost}
               </p>
-            </div>
-          </Section>
-
-          <Section
-            id="stay"
-            icon="🏨"
-            title="Stay Details"
-            summary={`${trip.stayDetails?.hotelName || ""} ${
-              trip.stayDetails?.location || ""
-            }`}
-          >
-            <div className="mt-4 space-y-2">
-              <p>
-                <strong>Hotel:</strong> {trip.stayDetails?.hotelName}
-              </p>
-              <p>
-                <strong>Location:</strong> {trip.stayDetails?.location}
-              </p>
-              <p>
-                <strong>Type:</strong> {trip.stayDetails?.stayType}
-              </p>
-              <p>
-                <strong>Price:</strong> ₹{trip.stayDetails?.pricePerNight}/night
-              </p>
-              <p>
-                <strong>Rating:</strong> ⭐ {trip.stayDetails?.rating}
-              </p>
-              <p>{trip.stayDetails?.stayReview}</p>
-            </div>
-          </Section>
-
-          <Section
-            id="food"
-            icon="🍜"
-            title="Food Recommendation"
-            summary={trip.foodRecommendations?.mustTryFoods?.join(", ")}
-          >
-            <div className="mt-4 space-y-3">
-              <p>
-                <strong>Must Try:</strong>{" "}
-                {trip.foodRecommendations?.mustTryFoods?.join(", ")}
-              </p>
-              <p>
-                <strong>Cafes:</strong>{" "}
-                {trip.foodRecommendations?.cafes?.join(", ")}
-              </p>
-              <p>
-                <strong>Budget Options:</strong>{" "}
-                {trip.foodRecommendations?.budgetFoodOptions?.join(", ")}
-              </p>
-            </div>
-          </Section>
-
-          <Section
-            id="hidden"
-            icon="🌄"
-            title="Hidden Spots"
-            summary={`${trip.hiddenSpots?.length || 0} hidden gems`}
-          >
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              {trip.hiddenSpots?.map((spot, index) => (
-                <div key={index} className="rounded-xl bg-hoverBg p-3">
-                  <h4 className="break-words font-semibold text-headingText">
-                    {spot.title}
-                  </h4>
-                  <p className="break-words text-sm text-mutedText">
-                    {spot.description}
-                  </p>
-                </div>
-              ))}
             </div>
           </Section>
 
@@ -404,32 +330,19 @@ const TripDetails = () => {
             </ul>
           </Section>
 
+          {/* FIX: the create form only collects a single overall rating
+              now (budget/safety/food/stay/transport/experience sub-ratings
+              were dropped), so this section no longer renders a grid of
+              fields that will always be blank. */}
           <Section
             id="ratings"
             icon="⭐"
-            title="Overall Ratings"
+            title="Overall Rating"
             summary={`${trip.ratings?.overall}/5 overall rating`}
           >
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              <p>
-                <strong>Budget:</strong> {trip.ratings?.budget}
-              </p>
-              <p>
-                <strong>Safety:</strong> {trip.ratings?.safety}
-              </p>
-              <p>
-                <strong>Food:</strong> {trip.ratings?.food}
-              </p>
-              <p>
-                <strong>Stay:</strong> {trip.ratings?.stay}
-              </p>
-              <p>
-                <strong>Transport:</strong> {trip.ratings?.transport}
-              </p>
-              <p>
-                <strong>Experience:</strong> {trip.ratings?.experience}
-              </p>
-            </div>
+            <p className="text-lg font-semibold text-headingText">
+              ⭐ {trip.ratings?.overall}/5
+            </p>
           </Section>
         </div>
       </div>
