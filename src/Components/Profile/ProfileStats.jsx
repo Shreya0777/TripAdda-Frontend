@@ -12,12 +12,12 @@ const ProfileStats = ({ user, trips }) => {
       </div>
 
       <div className="stat place-items-center">
-        <div className="stat-value text-lg text-headingText sm:text-xl">4.8</div>
+        <div className="stat-value text-lg text-headingText sm:text-xl">0</div>
         <div className="stat-desc text-mutedText">Avg rating</div>
       </div>
 
       <div className="stat place-items-center">
-        <div className="stat-value text-lg text-headingText sm:text-xl">2.1k</div>
+        <div className="stat-value text-lg text-headingText sm:text-xl">0</div>
         <div className="stat-desc text-mutedText">Helped</div>
       </div>
     </div>
